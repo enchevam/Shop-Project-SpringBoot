@@ -25,6 +25,9 @@ public class Employee {
     @Column(name = "last_name", nullable = false)
     private String lastName;
 
+    @Column(name = "password", nullable = false)
+    private String password;
+
     @Column(nullable = false)
     private Integer age;
 
