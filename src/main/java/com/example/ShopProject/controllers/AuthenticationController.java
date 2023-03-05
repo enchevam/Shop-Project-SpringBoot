@@ -40,12 +40,23 @@ public class AuthenticationController {
 
         if (authenticatedEmployee.isPresent()) {
             session.setAttribute("employee", authenticatedEmployee.get());
-            return "redirect:/shop/home/";
+            return "redirect:/shop/home";
         } else {
             model.addAttribute("error", "Invalid username or password");
             return "shop/employeeLogin";
         }
     }
+
+    /*@GetMapping("/home")
+    public String showHome(HttpSession session, Model model) {
+        Employee employee = (Employee) session.getAttribute("employee");
+        if (employee == null) {
+            return "redirect:/shop/employeeLogin";
+        } else {
+            model.addAttribute("employee", employee);
+            return "/shop/home";
+        }
+    }*/
 
     @GetMapping("/home")
     public String showHome(HttpSession session, Model model) {
@@ -57,5 +68,9 @@ public class AuthenticationController {
             return "/shop/home";
         }
     }
+
+
+
+
 
 }
