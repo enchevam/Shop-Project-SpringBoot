@@ -21,8 +21,8 @@ public class Order {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "customer_id")
-    private Customer customer;
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @Column(nullable = false)
     private LocalDateTime orderDate;

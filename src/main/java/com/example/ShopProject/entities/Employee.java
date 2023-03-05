@@ -16,9 +16,6 @@ public class Employee {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "employee_id", unique = true, nullable = false)
-    private String employeeId;
-
     @Column(name = "first_name", nullable = false)
     private String firstName;
 
@@ -34,5 +31,4 @@ public class Employee {
     @Column(nullable = false)
     private BigDecimal salary;
 
-    // constructors, getters and setters
 }
