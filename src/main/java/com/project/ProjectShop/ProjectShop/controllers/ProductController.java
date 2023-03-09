@@ -21,8 +21,8 @@ public class ProductController {
         model.addAttribute("products", productService.findAll(keyword));
         //model.addAttribute("type", Type.values());
         model.addAttribute("items", cartItem.getQuantity());
-        System.out.println(cartItem.getQuantity());
-        return "all_products";
+
+        return "all";//all_products
     }
 
 

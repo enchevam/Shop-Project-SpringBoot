@@ -9,7 +9,6 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.List;
 
 @Getter
 @Setter
@@ -41,12 +40,12 @@ public class Product { //Данни за стоките: product_id,name,price,q
     @Max(500)
     @Column(nullable = false)
     private Integer quantity;
+
     @Enumerated(EnumType.STRING)
     private Type productType;
-    @Column(nullable = false)
+
     private String imageUrl;
-//    @OneToMany(mappedBy = "order_id")
-//    private List<OrderDetails> orderDetailsList;
+
 
 
 

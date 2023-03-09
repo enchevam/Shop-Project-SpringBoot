@@ -5,25 +5,26 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
+
+@Entity
 @Getter
 @Setter
-@Entity
 public class CartItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne
+    //@Column( nullable = false)
+    private Order order;
+
+    @ManyToOne //(fetch = FetchType.LAZY)
+    //@Column( nullable = false)
+    private Product product;
+
     private Integer quantity;
 
     private Double totalPrice;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cart_id")
-    private Cart cart;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id")
-    private Product product;
 
 
 }

@@ -9,12 +9,19 @@ public class Employee {//employee_id,first_name,last_name,age,salary
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
+
+    @Column(nullable = false, unique = true)
     private String firstName;
+
+    @Column(nullable = false, unique = true)
     private String lastName;
+
+    @Column(nullable = false, unique = true)
     private Integer age;
+
+    @Column(nullable = false, unique = true)
     private Double salary;
-//    @OneToMany(mappedBy = "employee")
-//    private List<Order> orders;
+
 
 
 }

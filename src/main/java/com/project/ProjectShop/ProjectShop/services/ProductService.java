@@ -1,7 +1,6 @@
 package com.project.ProjectShop.ProjectShop.services;
 
 import com.project.ProjectShop.ProjectShop.entities.Product;
-import com.project.ProjectShop.ProjectShop.repositories.OrderDetailsRepository;
 import com.project.ProjectShop.ProjectShop.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,8 +12,6 @@ import java.util.List;
 public class ProductService {
     @Autowired
     private ProductRepository productRepository;
-    @Autowired
-    private OrderDetailsRepository orderDetailsRepository;
 
 
     public void save(Product product) {
@@ -22,7 +19,7 @@ public class ProductService {
     }
 
     public Product findById(Long productId) {
-        System.out.println("find by id " + productId);
+        //System.out.println("find by id " + productId);
         return productRepository.findById(productId).get();
     }
 

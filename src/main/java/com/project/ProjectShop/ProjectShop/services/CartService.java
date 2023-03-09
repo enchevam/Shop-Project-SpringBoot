@@ -49,37 +49,68 @@ public class CartService {
         }
         cart.setTotalPrice(totalPrice);
     }
-
-    public void addItemToCustomerShoppingCart(Long productId, HttpSession session) {
+    public void addItemToShoppingCart(Long productId, HttpSession session) {
         Product product = productService.findById(productId);
-        List<CartItem> items = new ArrayList<>();
         if (product != null) {
             Cart cart = (Cart) session.getAttribute("cart");
             if (cart == null) {
                 cart = new Cart();
-                CartItem cartItem = new CartItem();
-                cartItem.setProduct(product);
-                cartItem.setQuantity(1);
-                items.add(cartItem);
-            } else {
-                items = cart.getCartItems();
-                CartItem item = findCartItemByProduct(items, product);
-                if (item != null) {
-                    item.setQuantity(item.getQuantity() + 1);
-
-                } else {
-                    item = new CartItem();
-                    item.setProduct(product);
-                    item.setQuantity(1);
-                    items.add(item);
-                }
-
+                session.setAttribute("cart", cart);
             }
-
+            List<CartItem> items = cart.getCartItems();
+            if (items == null) {
+                items = new ArrayList<>();
+            }
+            CartItem item = findCartItemByProduct(items, product);
+            if (item != null) {
+                item.setQuantity(item.getQuantity() + 1);
+            } else {
+                item = new CartItem();
+                item.setProduct(product);
+                item.setQuantity(1);
+                items.add(item);
+            }
             cart.setCartItems(items);
-            System.out.println(items);
             cart.setTotalPrice(calculateTotalPrice(items));
-            session.setAttribute("cart", cart);
         }
     }
+
+//    public void addItemToShoppingCart(Long productId, HttpSession session) {
+//        Product product = productService.findById(productId);
+//        List<CartItem> items = new ArrayList<>();
+//        if (product != null) {
+//            Cart cart = (Cart) session.getAttribute("cart");
+//            if (cart == null) {
+//                cart = new Cart();
+//                session.setAttribute("cart", cart);
+//                CartItem cartItem = new CartItem();
+//                cartItem.setProduct(product);
+//                cartItem.setQuantity(1);
+//                items.add(cartItem);
+//                System.out.println("cart nulll");
+//            } else {
+//                items = cart.getCartItems();
+//                CartItem item = findCartItemByProduct(items, product);
+//                if (item != null) {
+//                    item.setQuantity(item.getQuantity() + 1);
+//                    System.out.println("item exist");
+//
+//                } else {
+//                    item = new CartItem();
+//                    item.setProduct(product);
+//                    item.setQuantity(1);
+//                    items.add(item);
+//                    System.out.println("new item ");
+//                }
+//
+//            }
+//
+//            cart.setCartItems(items);
+//            System.out.println("cart set items" + items);
+//            cart.setTotalPrice(calculateTotalPrice(items));
+//            session.setAttribute("cart", cart);
+//        }
+//    }
+
+
 }

@@ -6,8 +6,6 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
 
@@ -20,23 +18,25 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
-    @Column(nullable = false)
-    private String fullName;
-    @Email
-    @Column(nullable = false)
-    private String email;
-    @Column(nullable = false)
-    private String phoneNumber;
-    @Column(nullable = false)
-    private String address;
+
+    @ManyToOne
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
+    @ManyToOne
+    @JoinColumn(name = "employee_id" )
+    private Employee employee;
+
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
+
     @CreationTimestamp
     private Date orderDate;
+
     @Column(nullable = false)
     private Double totalPrice;
+
     @OneToMany(mappedBy = "order")
-    private List<OrderItems> orderDetailsList;
+    private List<CartItem> cartItems;
 
 
 }
