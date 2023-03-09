@@ -1,40 +1,44 @@
 package com.example.ShopProject.entities;
 
-import com.example.ShopProject.utils.OrderStatus;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Date;
 
 @Entity
 @Table(name = "orders")
 @Getter
 @Setter
 public class Order {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @NotNull(message = "Employee is mandatory")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "employee_id")
+    private Employee employee;
 
-    @Column(nullable = false)
-    private LocalDateTime orderDate;
+    @NotNull(message = "Customer is mandatory")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
 
-    @Column(nullable = false)
+    @NotNull(message = "Date is mandatory")
+    @Column(name = "date")
+    private Date date;
+
+    @DecimalMin(value = "0.0", inclusive = false, message = "Price should be greater than 0")
+    @NotNull(message = "Total price is mandatory")
+    @Column(name = "total_price")
     private BigDecimal totalPrice;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private OrderStatus status;
+    @NotBlank(message = "Status is mandatory")
+    @Column(name = "status")
+    private String status;
 
-    @OneToMany(mappedBy = "order")
-    private List<OrderItem> orderItems = new ArrayList<>();
-
+    // getters and setters
 }
