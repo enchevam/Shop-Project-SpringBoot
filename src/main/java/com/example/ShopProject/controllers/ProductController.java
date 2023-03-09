@@ -1,7 +1,6 @@
 package com.example.ShopProject.controllers;
 
 import com.example.ShopProject.entities.Product;
-import com.example.ShopProject.repositories.ProductRepository;
 import com.example.ShopProject.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -52,16 +51,16 @@ public class ProductController {
     // Връща всички продукти, сортирани по срок на годност (най-скоро изтичащите първи)
     @GetMapping("/products/sortByExpiresIn")
     public ResponseEntity<List<Product>> getProductsSortedByExpiresIn() {
-        List<Product> sortedProducts = productService.sortProductsByExpiresIn();
+        List<Product> sortedProducts = productService.sortProductsByExpireIn();
         return new ResponseEntity<>(sortedProducts, HttpStatus.OK);
     }
 
     // Търси продукти по име
-    @GetMapping("/products/searchByName")
+    /*@GetMapping("/products/searchByName")
     public ResponseEntity<List<Product>> searchProductsByName(@RequestParam String name) {
         List<Product> foundProducts = productService.searchProductsByName(name);
         return new ResponseEntity<>(foundProducts, HttpStatus.OK);
-    }
+    }*/
 
     // Търси продукти по цена (в даден интервал)
     @GetMapping("/products/searchByPrice")

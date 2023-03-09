@@ -9,11 +9,11 @@ import java.util.List;
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
 
-    List<Product> findByNameContainingIgnoreCase(String searchQuery);
+    //List<Product> findByNameContainingIgnoreCase(String searchQuery);
 
     List<Product> findByPriceBetween(double minPrice, double maxPrice);
 
-    List<Product> findByExpiresInAfter(LocalDate today);
+    List<Product> findByExpireInAfter(LocalDate today);
 
-    List<Product> findByQuantityBetween(int quantity);
+    List<Product> findByQuantity(int quantity);
 }

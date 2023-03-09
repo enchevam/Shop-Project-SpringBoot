@@ -20,16 +20,16 @@ public class ProductService {
         return productRepository.findAll();
     }
 
-    public List<Product> searchProductsByName(String searchQuery) {
+   /* public List<Product> searchProductsByName(String searchQuery) {
         return productRepository.findByNameContainingIgnoreCase(searchQuery);
-    }
+    }*/
 
     public List<Product> filterProductsByPriceRange(double minPrice, double maxPrice) {
         return productRepository.findByPriceBetween(minPrice, maxPrice);
     }
 
     public List<Product> filterProductsByQuantity(int quantity) {
-        return productRepository.findByQuantityBetween(quantity);
+        return productRepository.findByQuantity(quantity);
     }
 
     public Product getProductById(Long productId) {
@@ -67,12 +67,12 @@ public class ProductService {
         return productRepository.findAll(Sort.by("price"));
     }
 
-    public List<Product> sortProductsByExpiresIn() {
-        return productRepository.findAll(Sort.by("expiresIn"));
+    public List<Product> sortProductsByExpireIn() {
+        return productRepository.findAll(Sort.by("expireIn"));
     }
 
     public List<Product> getExpiringProducts() {
         LocalDate today = LocalDate.now();
-        return productRepository.findByExpiresInAfter(today);
+        return productRepository.findByExpireInAfter(today);
     }
 }
