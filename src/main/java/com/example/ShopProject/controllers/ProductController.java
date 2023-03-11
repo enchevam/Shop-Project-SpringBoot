@@ -1,19 +1,37 @@
 package com.example.ShopProject.controllers;
 
+import com.example.ShopProject.entities.Customer;
 import com.example.ShopProject.entities.Product;
 import com.example.ShopProject.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @Controller
+@RequestMapping("/shop")
 public class ProductController {
     @Autowired
     ProductService productService;
+
+    @GetMapping("/products")
+    public String getProducts(@RequestParam(defaultValue = "name") String sortBy,
+                              @RequestParam(defaultValue = "asc") String sortDirection,
+                              Model model) {
+        // get sorted data based on sortBy and sortDirection
+        List<Product> products = productService.getSortedProducts(sortBy, sortDirection);
+
+        // add sorted data to model
+        model.addAttribute("products", products);
+        model.addAttribute("sortDirection", sortDirection);
+
+        return "shop/products";
+    }
     @PostMapping("/products")
     public ResponseEntity<Product> addProduct(@RequestBody Product product) {
         Product newProduct = productService.addProduct(product);

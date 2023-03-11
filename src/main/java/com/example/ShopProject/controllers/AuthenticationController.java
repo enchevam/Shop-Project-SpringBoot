@@ -30,7 +30,7 @@ public class AuthenticationController {
     }
 
     @GetMapping("/employeeLogin")
-    public String showLoginForm(Model model) {
+    public String showEmployeeLoginForm(Model model) {
         model.addAttribute("employee", new Employee());
         return "shop/employeeLogin";
     }
