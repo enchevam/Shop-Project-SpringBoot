@@ -35,11 +35,6 @@ public class CustomerController {
             return "shop/registration";
         }
 
-        return "redirect:/success";
-    }
-
-    @GetMapping("/success")
-    public String success() {
-        return "success";
+        return "redirect:/customerLogin";
     }
 }

@@ -1,5 +1,6 @@
 package com.example.ShopProject.controllers;
 
+import com.example.ShopProject.entities.Customer;
 import com.example.ShopProject.entities.Employee;
 import com.example.ShopProject.repositories.EmployeeRepository;
 import com.example.ShopProject.services.AuthenticationService;
@@ -32,6 +33,11 @@ public class AuthenticationController {
         return "shop/employeeLogin";
     }
 
+    @GetMapping("/customerLogin")
+    public String showCustomerLoginForm(Model model) {
+        model.addAttribute("customer", new Customer());
+        return "shop/customerLogin";
+    }
     @PostMapping("/employeeLogin")
     public String processLoginForm(@ModelAttribute("employee") Employee employee,
                                    HttpSession session,
@@ -46,6 +52,10 @@ public class AuthenticationController {
             return "shop/employeeLogin";
         }
     }
+
+
+
+
 
     /*@GetMapping("/home")
     public String showHome(HttpSession session, Model model) {
