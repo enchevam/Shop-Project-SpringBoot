@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -38,10 +39,11 @@ public class AuthenticationController {
         model.addAttribute("customer", new Customer());
         return "shop/customerLogin";
     }
+
     @PostMapping("/employeeLogin")
-    public String processLoginForm(@ModelAttribute("employee") Employee employee,
-                                   HttpSession session,
-                                   Model model) {
+    public String processEmployeeLoginForm(@ModelAttribute("employee") Employee employee,
+                                           HttpSession session,
+                                           Model model) {
         Optional<Employee> authenticatedEmployee = authService.authenticateEmployee(employee.getId(), employee.getPassword());
 
         if (authenticatedEmployee.isPresent()) {
@@ -53,20 +55,28 @@ public class AuthenticationController {
         }
     }
 
-
-
-
-
-    /*@GetMapping("/home")
-    public String showHome(HttpSession session, Model model) {
-        Employee employee = (Employee) session.getAttribute("employee");
-        if (employee == null) {
-            return "redirect:/shop/employeeLogin";
-        } else {
-            model.addAttribute("employee", employee);
-            return "/shop/home";
+    @PostMapping("/customerLogin")
+    public String login(@ModelAttribute("customer") Customer customer, HttpSession session, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            return "shop/customerLogin";
         }
-    }*/
+
+        try {
+            Optional<Customer> authenticatedCustomer = authService.authenticateCustomer(customer.getEmail(), customer.getPassword());
+
+            if (authenticatedCustomer.isPresent()) {
+                session.setAttribute("customer", authenticatedCustomer.get());
+                return "redirect:/shop/products";
+            } else {
+                model.addAttribute("customer", customer);
+                model.addAttribute("error", "Wrong email or password");
+                return "shop/customerLogin";
+            }
+        } catch (IllegalArgumentException ex) {
+            bindingResult.rejectValue("email", "error.email", ex.getMessage());
+            return "shop/customerLogin";
+        }
+    }
 
     @GetMapping("/home")
     public String showHome(HttpSession session, Model model) {
@@ -78,9 +88,6 @@ public class AuthenticationController {
             return "/shop/home";
         }
     }
-
-
-
 
 
 }

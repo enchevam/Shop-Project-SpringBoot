@@ -8,4 +8,5 @@ public class ResourceNotFoundException extends RuntimeException {
 
     public ResourceNotFoundException(String product, String id, Long productId) {
     }
+
 }

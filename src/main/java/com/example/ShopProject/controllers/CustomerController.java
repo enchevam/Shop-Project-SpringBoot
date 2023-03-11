@@ -22,7 +22,7 @@ public class CustomerController {
     @GetMapping("/register")
     public String registerForm(Model model) {
         model.addAttribute("customer", new Customer());
-        return "shop/registration";
+        return "shop/register";
     }
 
     @PostMapping("/register")
@@ -32,7 +32,7 @@ public class CustomerController {
             customerService.register(customer);
         } catch (RuntimeException ex) {
             model.addAttribute("error", ex.getMessage());
-            return "shop/registration";
+            return "shop/register";
         }
 
         return "redirect:/customerLogin";
