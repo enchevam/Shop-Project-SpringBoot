@@ -33,7 +33,7 @@ public class Product {
     private Integer quantity;
 
     @Column(name = "type")
-    @NotBlank(message = "Type cannot be blank")
+    @NotNull(message = "Type cannot be blank")
     @Enumerated(EnumType.STRING)
     private ProductType type;
 

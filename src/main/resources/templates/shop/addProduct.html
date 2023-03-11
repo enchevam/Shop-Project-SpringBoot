@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Product</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5">
+    <h1>Add Product</h1>
+    <form th:action="@{/shop/addProduct}" method="post">
+        <div class="form-group">
+            <label for="name">Name:</label>
+            <input type="text" class="form-control" id="name" name="name" required>
+        </div>
+        <div class="form-group">
+            <label for="price">Price:</label>
+            <input type="number" class="form-control" id="price" name="price" step="0.01" min="0" required>
+        </div>
+        <div class="form-group">
+            <label for="quantity">Quantity:</label>
+            <input type="number" class="form-control" id="quantity" name="quantity" min="1" required>
+        </div>
+        <div class="form-group">
+            <label for="type">Type:</label>
+            <select class="form-control" id="type" name="type" required>
+                <option value="">-- Select Type --</option>
+                <option th:each="type : ${T(com.example.ShopProject.utils.ProductType).values()}"
+                        th:value="${type}" th:text="${type}"></option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="color">Color:</label>
+            <input type="text" class="form-control" id="color" name="color" required>
+        </div>
+        <div class="form-group">
+            <label for="expireIn">Expire In:</label>
+            <input type="date" class="form-control" id="expireIn" name="expireIn" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Add Product</button>
+    </form>
+</div>
+</body>
+</html>

@@ -1,16 +1,18 @@
 package com.example.ShopProject.controllers;
 
-import com.example.ShopProject.entities.Customer;
 import com.example.ShopProject.entities.Product;
 import com.example.ShopProject.services.ProductService;
+import com.example.ShopProject.utils.ProductType;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -18,6 +20,25 @@ import java.util.List;
 public class ProductController {
     @Autowired
     ProductService productService;
+
+    @GetMapping("/addProduct")
+    public String showAddProductForm(Model model) {
+        model.addAttribute("productTypes", ProductType.values());
+        model.addAttribute("product", new Product());
+        return "shop/addProduct";
+    }
+
+    @PostMapping("/addProduct")
+    public String addProduct(@ModelAttribute("product") @Valid Product product,
+                             BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            model.addAttribute("productTypes", ProductType.values());
+            return "shop/addProduct";
+        }
+        productService.addProduct(product);
+        return "redirect:/shop/products";
+    }
+
 
     @GetMapping("/products")
     public String getProducts(@RequestParam(defaultValue = "name") String sortBy,
@@ -52,26 +73,6 @@ public class ProductController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    // Връща всички продукти, сортирани по име
-    @GetMapping("/products/sortByName")
-    public ResponseEntity<List<Product>> getProductsSortedByName() {
-        List<Product> sortedProducts = productService.sortProductsByName();
-        return new ResponseEntity<>(sortedProducts, HttpStatus.OK);
-    }
-
-    // Връща всички продукти, сортирани по цена
-    @GetMapping("/products/sortByPrice")
-    public ResponseEntity<List<Product>> getProductsSortedByPrice() {
-        List<Product> sortedProducts = productService.sortProductsByPrice();
-        return new ResponseEntity<>(sortedProducts, HttpStatus.OK);
-    }
-
-    // Връща всички продукти, сортирани по срок на годност (най-скоро изтичащите първи)
-    @GetMapping("/products/sortByExpiresIn")
-    public ResponseEntity<List<Product>> getProductsSortedByExpiresIn() {
-        List<Product> sortedProducts = productService.sortProductsByExpireIn();
-        return new ResponseEntity<>(sortedProducts, HttpStatus.OK);
-    }
 
     // Търси продукти по име
     /*@GetMapping("/products/searchByName")

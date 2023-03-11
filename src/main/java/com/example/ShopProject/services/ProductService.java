@@ -8,6 +8,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -16,13 +17,35 @@ public class ProductService {
     @Autowired
     private ProductRepository productRepository;
 
-    public List<Product> getAllProducts() {
-        return productRepository.findAll();
+    public List<Product> getSortedProducts(String sortBy, String sortDirection) {
+        List<Product> products = productRepository.findAll();
+
+        Comparator<Product> comparator = null;
+
+        switch (sortBy) {
+            case "name":
+                comparator = Comparator.comparing(Product::getName);
+                break;
+            case "price":
+                comparator = Comparator.comparing(Product::getPrice);
+                break;
+            case "expire date":
+                comparator = Comparator.comparing(Product::getExpireIn);
+                break;
+        }
+
+        if (comparator != null) {
+            if ("desc".equals(sortDirection)) {
+                comparator = comparator.reversed();
+            }
+            products.sort(comparator);
+        }
+        return products;
     }
 
-   /* public List<Product> searchProductsByName(String searchQuery) {
-        return productRepository.findByNameContainingIgnoreCase(searchQuery);
-    }*/
+    public Product addProduct(Product product) {
+        return productRepository.save(product);
+    }
 
     public List<Product> filterProductsByPriceRange(double minPrice, double maxPrice) {
         return productRepository.findByPriceBetween(minPrice, maxPrice);
@@ -37,9 +60,7 @@ public class ProductService {
                 .orElseThrow(() -> new ResourceNotFoundException("Product", "id", productId));
     }
 
-    public Product addProduct(Product product) {
-        return productRepository.save(product);
-    }
+
 
     public Product updateProduct(Long productId, Product productDetails) {
         Product product = getProductById(productId);
@@ -59,17 +80,6 @@ public class ProductService {
         productRepository.delete(product);
     }
 
-    public List<Product> sortProductsByName() {
-        return productRepository.findAll(Sort.by("name"));
-    }
-
-    public List<Product> sortProductsByPrice() {
-        return productRepository.findAll(Sort.by("price"));
-    }
-
-    public List<Product> sortProductsByExpireIn() {
-        return productRepository.findAll(Sort.by("expireIn"));
-    }
 
     public List<Product> getExpiringProducts() {
         LocalDate today = LocalDate.now();
