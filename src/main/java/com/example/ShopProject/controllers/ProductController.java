@@ -4,8 +4,6 @@ import com.example.ShopProject.entities.Product;
 import com.example.ShopProject.services.ProductService;
 import com.example.ShopProject.utils.ProductType;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -13,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 @Controller
@@ -77,25 +77,25 @@ public class ProductController {
         return mav;
     }
 
+    @PostMapping("/products")
+    public String searchProducts(
+            @RequestParam(name = "searchById", required = false) Long searchById,
+            @RequestParam(name = "searchByName", required = false) String searchByName,
+            @RequestParam(name = "searchByQuantity", required = false) Integer searchByQuantity,
+            @RequestParam(name = "price-min", required = false) BigDecimal priceMin,
+            @RequestParam(name = "price-max", required = false) BigDecimal priceMax,
+            Model model) {
 
-    // Търси продукти по име
-    /*@GetMapping("/products/searchByName")
-    public ResponseEntity<List<Product>> searchProductsByName(@RequestParam String name) {
-        List<Product> foundProducts = productService.searchProductsByName(name);
-        return new ResponseEntity<>(foundProducts, HttpStatus.OK);
-    }*/
+        if (priceMin != null) {
+            priceMin = priceMin.setScale(2, RoundingMode.HALF_UP);
+        }
+        if (priceMax != null) {
+            priceMax = priceMax.setScale(2, RoundingMode.HALF_UP);
+        }
 
-    // Търси продукти по цена (в даден интервал)
-    @GetMapping("/products/searchByPrice")
-    public ResponseEntity<List<Product>> searchProductsByPrice(@RequestParam double minPrice, @RequestParam double maxPrice) {
-        List<Product> foundProducts = productService.filterProductsByPriceRange(minPrice, maxPrice);
-        return new ResponseEntity<>(foundProducts, HttpStatus.OK);
-    }
+        List<Product> products = productService.searchProducts(searchById, searchByName, searchByQuantity, priceMin, priceMax);
 
-    // Търси продукти по налично количество
-    @GetMapping("/products/searchByQuantity")
-    public ResponseEntity<List<Product>> searchProductsByQuantity(@RequestParam int quantity) {
-        List<Product> foundProducts = productService.filterProductsByQuantity(quantity);
-        return new ResponseEntity<>(foundProducts, HttpStatus.OK);
+        model.addAttribute("products", products);
+        return "shop/products";
     }
 }
