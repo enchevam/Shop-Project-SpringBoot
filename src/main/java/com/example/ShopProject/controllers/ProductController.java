@@ -4,7 +4,6 @@ import com.example.ShopProject.entities.Product;
 import com.example.ShopProject.services.ProductService;
 import com.example.ShopProject.utils.ProductType;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -43,6 +42,7 @@ public class ProductController {
         }
         return modelAndView;
     }
+
     @GetMapping("/products")
     public String getProducts(@RequestParam(defaultValue = "name") String sortBy,
                               @RequestParam(defaultValue = "asc") String sortDirection,
@@ -54,14 +54,13 @@ public class ProductController {
 
         return "shop/products";
     }
+
     @PostMapping("/delete/{productId}")
-    private ModelAndView deleteProduct(@PathVariable(name="productId") Long productId) {
+    private ModelAndView deleteProduct(@PathVariable(name = "productId") Long productId) {
         productService.deleteProduct(productId);
         return new ModelAndView("redirect:/shop/products");
     }
 
-
-    // Променя продукт по дадено id
     @GetMapping("/editProduct/{id}")
     public String showUpdateForm(@PathVariable("id") Long id, Model model) {
         Product product = productService.getProductById(id);
@@ -89,7 +88,7 @@ public class ProductController {
     // Търси продукти по цена (в даден интервал)
     @GetMapping("/products/searchByPrice")
     public ResponseEntity<List<Product>> searchProductsByPrice(@RequestParam double minPrice, @RequestParam double maxPrice) {
-        List<Product> foundProducts = productService.filterProductsByPriceRange(minPrice,maxPrice);
+        List<Product> foundProducts = productService.filterProductsByPriceRange(minPrice, maxPrice);
         return new ResponseEntity<>(foundProducts, HttpStatus.OK);
     }
 

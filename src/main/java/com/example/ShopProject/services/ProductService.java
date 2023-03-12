@@ -4,8 +4,6 @@ import com.example.ShopProject.entities.Product;
 import com.example.ShopProject.repositories.ProductRepository;
 import com.example.ShopProject.utils.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.crossstore.ChangeSetPersister;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -30,7 +28,7 @@ public class ProductService {
             case "price":
                 comparator = Comparator.comparing(Product::getPrice);
                 break;
-            case "expire date":
+            case "expireIn":
                 comparator = Comparator.comparing(Product::getExpireIn);
                 break;
         }
