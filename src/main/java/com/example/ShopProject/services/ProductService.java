@@ -4,6 +4,7 @@ import com.example.ShopProject.entities.Product;
 import com.example.ShopProject.repositories.ProductRepository;
 import com.example.ShopProject.utils.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -47,6 +48,18 @@ public class ProductService {
         return productRepository.save(product);
     }
 
+    public void deleteProduct(Long productId) {
+        productRepository.deleteById(productId);
+    }
+
+    public Product updateProduct(Long id, Product product) {
+        if (!id.equals(product.getId())) {
+            product.setId(id);
+        }
+
+        return productRepository.save(product);
+    }
+
     public List<Product> filterProductsByPriceRange(double minPrice, double maxPrice) {
         return productRepository.findByPriceBetween(minPrice, maxPrice);
     }
@@ -61,28 +74,9 @@ public class ProductService {
     }
 
 
-
-    public Product updateProduct(Long productId, Product productDetails) {
-        Product product = getProductById(productId);
-
-        product.setName(productDetails.getName());
-        product.setPrice(productDetails.getPrice());
-        product.setQuantity(productDetails.getQuantity());
-        product.setType(productDetails.getType());
-        product.setColor(productDetails.getColor());
-        product.setExpireIn(productDetails.getExpireIn());
-
-        return productRepository.save(product);
-    }
-
-    public void deleteProduct(Long productId) {
-        Product product = getProductById(productId);
-        productRepository.delete(product);
-    }
-
-
     public List<Product> getExpiringProducts() {
         LocalDate today = LocalDate.now();
         return productRepository.findByExpireInAfter(today);
     }
+
 }

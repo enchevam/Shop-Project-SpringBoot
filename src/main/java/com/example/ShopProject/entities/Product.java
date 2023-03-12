@@ -3,6 +3,7 @@ package com.example.ShopProject.entities;
 import com.example.ShopProject.utils.ProductType;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -44,6 +45,7 @@ public class Product {
     @Column(name = "expire_in")
     @NotNull(message = "Expire in cannot be null")
     @Future(message = "Expire date must be in the future")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate expireIn;
 
 
