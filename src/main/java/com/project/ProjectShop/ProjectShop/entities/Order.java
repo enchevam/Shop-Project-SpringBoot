@@ -20,10 +20,10 @@ public class Order {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "customer_id")
+    @JoinColumn(name = "customers_id", nullable = false)
     private Customer customer;
     @ManyToOne
-    @JoinColumn(name = "employee_id" )
+    @JoinColumn(name = "employees_id" )
     private Employee employee;
 
     @Enumerated(EnumType.STRING)
@@ -36,7 +36,7 @@ public class Order {
     private Double totalPrice;
 
     @OneToMany(mappedBy = "order")
-    private List<CartItem> cartItems;
+    private List<OrderProduct> orderProducts;
 
 
 }

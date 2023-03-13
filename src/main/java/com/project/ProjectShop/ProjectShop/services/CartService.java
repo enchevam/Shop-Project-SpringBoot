@@ -1,7 +1,7 @@
 package com.project.ProjectShop.ProjectShop.services;
 
-import com.project.ProjectShop.ProjectShop.entities.Cart;
-import com.project.ProjectShop.ProjectShop.entities.CartItem;
+import com.project.ProjectShop.ProjectShop.utils.Cart;
+import com.project.ProjectShop.ProjectShop.entities.OrderProduct;
 import com.project.ProjectShop.ProjectShop.entities.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,8 +16,8 @@ public class CartService {
     private ProductService productService;
 
 
-    public CartItem findCartItemByProduct(List<CartItem> items, Product product) {
-        for (CartItem item : items) {
+    public OrderProduct findCartItemByProduct(List<OrderProduct> items, Product product) {
+        for (OrderProduct item : items) {
             if (item.getProduct().getId().equals(product.getId())) {
                 return item;
             }
@@ -26,29 +26,18 @@ public class CartService {
         return null;
     }
 
-    public double calculateTotalPrice(List<CartItem> items) {
+    public double calculateTotalPrice(List<OrderProduct> items) {
         double cartTotalPrice = 0.0;
 
-        for (CartItem item : items) {
+        for (OrderProduct item : items) {
             double itemTotalPrice = item.getProduct().getPrice() * item.getQuantity();
-            item.setTotalPrice(itemTotalPrice);
+            item.setTotalPrice(Math.round(itemTotalPrice * 100) / 100.0d);
             cartTotalPrice += itemTotalPrice;
         }
 
-        return cartTotalPrice;
+        return Math.round(cartTotalPrice * 100) / 100.0d;
     }
 
-    public void removeItem(Long productId, Cart cart) {
-        cart.getCartItems().removeIf(item -> item.getProduct().getId().equals(productId));
-
-        Double totalPrice = 0.0;
-        for (CartItem item : cart.getCartItems()) {
-            Double itemPrice = item.getProduct().getPrice() * item.getQuantity();
-            item.setTotalPrice(itemPrice);
-            totalPrice += itemPrice;
-        }
-        cart.setTotalPrice(totalPrice);
-    }
     public void addItemToShoppingCart(Long productId, HttpSession session) {
         Product product = productService.findById(productId);
         if (product != null) {
@@ -57,60 +46,53 @@ public class CartService {
                 cart = new Cart();
                 session.setAttribute("cart", cart);
             }
-            List<CartItem> items = cart.getCartItems();
+            List<OrderProduct> items = cart.getOrderProducts();
             if (items == null) {
                 items = new ArrayList<>();
             }
-            CartItem item = findCartItemByProduct(items, product);
+            OrderProduct item = findCartItemByProduct(items, product);
             if (item != null) {
                 item.setQuantity(item.getQuantity() + 1);
             } else {
-                item = new CartItem();
+                item = new OrderProduct();
                 item.setProduct(product);
                 item.setQuantity(1);
                 items.add(item);
             }
-            cart.setCartItems(items);
+            cart.setOrderProducts(items);
             cart.setTotalPrice(calculateTotalPrice(items));
         }
     }
 
-//    public void addItemToShoppingCart(Long productId, HttpSession session) {
-//        Product product = productService.findById(productId);
-//        List<CartItem> items = new ArrayList<>();
-//        if (product != null) {
-//            Cart cart = (Cart) session.getAttribute("cart");
-//            if (cart == null) {
-//                cart = new Cart();
-//                session.setAttribute("cart", cart);
-//                CartItem cartItem = new CartItem();
-//                cartItem.setProduct(product);
-//                cartItem.setQuantity(1);
-//                items.add(cartItem);
-//                System.out.println("cart nulll");
-//            } else {
-//                items = cart.getCartItems();
-//                CartItem item = findCartItemByProduct(items, product);
-//                if (item != null) {
-//                    item.setQuantity(item.getQuantity() + 1);
-//                    System.out.println("item exist");
-//
-//                } else {
-//                    item = new CartItem();
-//                    item.setProduct(product);
-//                    item.setQuantity(1);
-//                    items.add(item);
-//                    System.out.println("new item ");
-//                }
-//
-//            }
-//
-//            cart.setCartItems(items);
-//            System.out.println("cart set items" + items);
-//            cart.setTotalPrice(calculateTotalPrice(items));
-//            session.setAttribute("cart", cart);
-//        }
-//    }
+    public void updateItemQuantityInShoppingCart(Long productId, Integer quantity, HttpSession session) {
+        Cart cart = (Cart) session.getAttribute("cart");
 
+        for (OrderProduct orderProduct : cart.getOrderProducts()) {
+            if (orderProduct.getProduct().getId().equals(productId)) {
+                orderProduct.setQuantity(quantity);
+                orderProduct.setTotalPrice(orderProduct.getProduct().getPrice() * orderProduct.getQuantity());
+                break;
+            }
+        }
+        double total = 0.0;
+        List<OrderProduct> orderProducts = cart.getOrderProducts();
 
+        for (OrderProduct op : orderProducts) {
+            total += op.getTotalPrice();
+        }
+
+        cart.setTotalPrice(total);
+    }
+
+    public void removeItemFromShoppingCart(Long productId, Cart cart) {
+        List<OrderProduct> itemsDelete = new ArrayList<>();
+        for (OrderProduct item : cart.getOrderProducts()) {
+            if (item.getProduct().getId().equals(productId)) {
+                itemsDelete.add(item);
+            }
+        }
+        cart.getOrderProducts().removeAll(itemsDelete);
+        cart.setTotalPrice(calculateTotalPrice(cart.getOrderProducts()));
+
+    }
 }

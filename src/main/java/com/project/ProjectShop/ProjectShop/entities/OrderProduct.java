@@ -9,17 +9,18 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Setter
-public class CartItem {
+@Table(name = "order_products")
+public class OrderProduct {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    //@Column( nullable = false)
+    @JoinColumn( nullable = false)
     private Order order;
 
     @ManyToOne //(fetch = FetchType.LAZY)
-    //@Column( nullable = false)
+    @JoinColumn( nullable = false)
     private Product product;
 
     private Integer quantity;

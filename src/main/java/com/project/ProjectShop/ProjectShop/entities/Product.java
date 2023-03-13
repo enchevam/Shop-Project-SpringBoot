@@ -13,6 +13,7 @@ import javax.validation.constraints.Size;
 @Getter
 @Setter
 @Entity
+@Table(name = "products")
 public class Product { //Данни за стоките: product_id,name,price,quantity,type,color,expires_in
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

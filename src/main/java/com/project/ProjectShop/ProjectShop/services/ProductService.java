@@ -23,7 +23,7 @@ public class ProductService {
         return productRepository.findById(productId).get();
     }
 
-    public List<Product> findAll(String keyword) {
+    public List<Product> findAllAvailableQuantity(String keyword) {
         List<Product> prod = new ArrayList<>();
         if (keyword != null) {
             for (Product pr : productRepository.search(keyword))
