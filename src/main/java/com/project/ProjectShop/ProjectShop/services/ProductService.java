@@ -19,7 +19,6 @@ public class ProductService {
     }
 
     public Product findById(Long productId) {
-        //System.out.println("find by id " + productId);
         return productRepository.findById(productId).get();
     }
 
