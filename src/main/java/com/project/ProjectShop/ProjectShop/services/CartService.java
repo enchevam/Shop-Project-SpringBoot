@@ -31,7 +31,7 @@ public class CartService {
 
         for (OrderProduct item : items) {
             double itemTotalPrice = item.getProduct().getPrice() * item.getQuantity();
-            item.setTotalPrice(Math.round(itemTotalPrice * 100) / 100.0d);
+            item.setTotalPrice(itemTotalPrice);
             cartTotalPrice += itemTotalPrice;
         }
 
@@ -70,18 +70,10 @@ public class CartService {
         for (OrderProduct orderProduct : cart.getOrderProducts()) {
             if (orderProduct.getProduct().getId().equals(productId)) {
                 orderProduct.setQuantity(quantity);
-                orderProduct.setTotalPrice(orderProduct.getProduct().getPrice() * orderProduct.getQuantity());
                 break;
             }
         }
-        double total = 0.0;
-        List<OrderProduct> orderProducts = cart.getOrderProducts();
-
-        for (OrderProduct op : orderProducts) {
-            total += op.getTotalPrice();
-        }
-
-        cart.setTotalPrice(total);
+        cart.setTotalPrice(calculateTotalPrice(cart.getOrderProducts()));
     }
 
     public void removeItemFromShoppingCart(Long productId, Cart cart) {
@@ -93,6 +85,5 @@ public class CartService {
         }
         cart.getOrderProducts().removeAll(itemsDelete);
         cart.setTotalPrice(calculateTotalPrice(cart.getOrderProducts()));
-
     }
 }
