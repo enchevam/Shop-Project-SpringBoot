@@ -14,6 +14,14 @@ public class Cart {
 
     private List<OrderProduct> orderProducts;
 
+    public Cart() {
+    }
+
+    public Cart(Double totalPrice, Customer customer) {
+        this.totalPrice = totalPrice;
+        this.customer = customer;
+    }
+
     public Long getId() {
         return id;
     }

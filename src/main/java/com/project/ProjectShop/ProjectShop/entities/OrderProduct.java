@@ -27,5 +27,12 @@ public class OrderProduct {
 
     private Double totalPrice;
 
+    public OrderProduct() {
+    }
 
+    public OrderProduct(Long id, Integer quantity,Product product) {
+        this.id = id;
+        this.quantity = quantity;
+        this.product = product;
+    }
 }

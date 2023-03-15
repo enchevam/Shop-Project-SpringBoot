@@ -1,13 +1,18 @@
 package com.project.ProjectShop.ProjectShop.services;
 
 import com.project.ProjectShop.ProjectShop.entities.Customer;
+import com.project.ProjectShop.ProjectShop.entities.Order;
 import com.project.ProjectShop.ProjectShop.repositories.CustomerRepository;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Service
@@ -18,6 +23,13 @@ public class CustomerService {
     @Autowired
     private CustomerRepository customerRepository;
 
+    public Customer findById(Long customerId) {
+        return customerRepository.findById(customerId).get();
+    }
+
+    public void updateCustomerInformation(Customer customer) {
+        customerRepository.save(customer);
+    }
 
     public void register(Customer customer) {
 
@@ -35,30 +47,4 @@ public class CustomerService {
         customerRepository.save(customer);
     }
 
-
-//    public void saveCustomer(Customer customer) {
-//        String encodedPassword = bCryptPasswordEncoder.encode(customer.getPassword());
-//        customer.setPassword(encodedPassword);
-//        System.out.println(encodedPassword);
-//        customerRepository.save(customer);
-//    }
-//    public List<Object> isCustomerPresent(Customer customer) {
-//        boolean userExists = false;
-//        String message = null;
-//        Customer customerGetEmail = customerRepository.getCustomerByEmail(customer.getEmail());
-//        if(customerGetEmail != null){
-//            userExists = true;
-//            message = "User Already Exist!";
-//        }
-//
-//        return Arrays.asList(userExists, message);
-//    }
-//    //@Override
-//    public UserDetails loadUserByEmail(String email) throws EmailNotFoundException {
-//        Customer customer = customerRepository.getCustomerByEmail(email);
-//        if(customer==null){
-//            throw new UsernameNotFoundException("User not found");
-//        }
-//        return new MyCustomerDetails(customer);
-//    }
 }

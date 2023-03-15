@@ -11,8 +11,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.thymeleaf.exceptions.TemplateProcessingException;
 
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 
@@ -22,49 +25,53 @@ public class CustomerController {
     @Autowired
     private CustomerService customerService;
 
-        @GetMapping("/register")
-        public String registerForm(Model model) {
-            model.addAttribute("customer", new Customer());
+    @GetMapping("/register")
+    public String registerForm(Model model) {
+        model.addAttribute("customer", new Customer());
+        return "shop/register";
+    }
+
+    @PostMapping("/register")
+    public String registerSubmit(@ModelAttribute @Valid Customer customer, BindingResult bindingResult, Model model) {
+
+        if (bindingResult.hasErrors()) {
+            return "shop/register";
+        }
+        try {
+            customerService.register(customer);
+        } catch (RuntimeException ex) {
+            model.addAttribute("error", ex.getMessage());
             return "shop/register";
         }
 
-        @PostMapping("/register")
-        public String registerSubmit(@ModelAttribute @Valid Customer customer, BindingResult bindingResult, Model model) {
+        return "redirect:/customerLogin";
+    }
 
-            if (bindingResult.hasErrors()) {
-                return "shop/register";
-            }
-            try {
-                customerService.register(customer);
-            } catch (RuntimeException ex) {
-                model.addAttribute("error", ex.getMessage());
-                return "shop/register";
-            }
 
-            return "redirect:/customerLogin";
+    @GetMapping("/update")
+    public String showCustomerRegistrationForm(Model model, HttpSession session, RedirectAttributes redirectAttributes) {
+        Customer customer = (Customer) session.getAttribute("customer");
+        model.addAttribute("customer", customer);
+        return "register_old";
+    }
+
+    @PostMapping("/save")
+    public String saveCustomerForm(final @Valid Customer customer, final BindingResult bindingResult, final Model model, HttpSession session) {
+
+        if (bindingResult.hasErrors()) {
+            return "/register_old";
         }
-
-
-//    @GetMapping("/register")
-//    public String showCustomerRegistrationForm(Model model) {
-//        model.addAttribute("customer", new Customer());
-//        return "register";
-//    }
-//
-//    @PostMapping("/save")
-//    public String saveCustomerForm(final @Valid Customer customer, final BindingResult bindingResult,final Model model){
-//        if(bindingResult.hasErrors()){
-//            return "/register";
-//        }
-//        List<Object> customerPresent = customerService.isCustomerPresent(customer);
-//        if((Boolean) customerPresent.get(0)){
-//            model.addAttribute("message", customerPresent.get(1));
-//            return "register";
-//        }
-//
-//        customerService.saveCustomer(customer);
-//        model.addAttribute("message", "Your information has been saved successfully!!!");
-//        return "register";
+        customerService.updateCustomerInformation(customer);
+        Customer updatedCustomer = customerService.findById(customer.getId());
+        session.setAttribute("customer", updatedCustomer);
+        model.addAttribute("message", "Your information has been updated successfully!!!");
+        return "register_old";
+    }
+//    @GetMapping("/getOrders")
+//    public String getCustomerOrders(Model model, HttpSession session){
+//        Customer customer = (Customer)session.getAttribute("customer");
+//        model.addAttribute("orders",customerService.getCustomerOrders(customer.getId()));
+//        return "order_details";
 //    }
 
 }

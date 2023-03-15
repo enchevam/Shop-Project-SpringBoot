@@ -38,5 +38,13 @@ public class Order {
     @OneToMany(mappedBy = "order")
     private List<OrderProduct> orderProducts;
 
+    public Order() {
+    }
+
+    public Order(Date orderDate, Double totalPrice) {
+        this.orderDate = orderDate;
+        this.totalPrice = totalPrice;
+    }
+
 
 }

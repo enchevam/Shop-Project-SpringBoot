@@ -50,6 +50,13 @@ public class OrderService {
         order.setOrderStatus(OrderStatus.valueOf("NEW"));
         order.setOrderDate(new Date());
         order.setTotalPrice(cart.getTotalPrice());
+        List<OrderProduct> orderProductsChecked = checkProductQuantity(cart,order);
+
+        orderRepository.save(order);
+        order.setOrderProducts(orderProductsChecked);
+        orderProductRepository.saveAll(orderProductsChecked);
+    }
+    public List<OrderProduct> checkProductQuantity(Cart cart, Order order){
         List<OrderProduct> orderProductsChecked = new ArrayList<>();
         for (OrderProduct orderProduct : cart.getOrderProducts()) {
             Product product = productRepository.findById(orderProduct.getProduct().getId()).get();
@@ -61,40 +68,8 @@ public class OrderService {
             orderProduct.setOrder(order);
             orderProductsChecked.add(orderProduct);
         }
-        orderRepository.save(order);
-        order.setOrderProducts(orderProductsChecked);
-        orderProductRepository.saveAll(orderProductsChecked);
+        return orderProductsChecked;
     }
 
-//    public void saveOrder(Cart cart, HttpSession session) {
-//        Customer customer = (Customer) session.getAttribute("customer");
-//        Order order = new Order();
-//        order.setCustomer(customer);
-//        order.setOrderStatus(OrderStatus.valueOf("NEW"));
-//        order.setOrderDate(new Date());
-//        order.setTotalPrice(cart.getTotalPrice());
-//        orderRepository.save(order);
-//
-//        for (OrderProduct orderProduct : cart.getOrderProducts()) {
-//            orderProduct.setOrder(order);
-//        }
-//
-//        orderProductRepository.saveAll(cart.getOrderProducts());
-//    }
-//
-//    public boolean updateQuantity(Cart cart) {
-//        List<Product> checkedProduct =new ArrayList<>();
-//        for (OrderProduct orderProduct : cart.getOrderProducts()) {
-//            Product product = orderProduct.getProduct();
-//            if (product.getQuantity() >= orderProduct.getQuantity()) {
-//                product.setQuantity(product.getQuantity() - orderProduct.getQuantity());
-//                productRepository.save(product);
-//                return true;
-//            }
-//
-//        }
-//
-//        return false;
-//    }
 
 }

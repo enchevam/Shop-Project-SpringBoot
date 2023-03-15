@@ -6,6 +6,9 @@
     <meta name="description" content="" />
     <meta name="author" content="" />
     <title>Shop Homepage - Start Bootstrap Template</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <!-- Favicon-->
     <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
     <!-- Bootstrap icons-->
@@ -63,19 +66,19 @@
                     Cart
                     <span class="badge bg-dark text-white ms-1 rounded-pill" th:text="${items}"></span>
                 </button>
-                <div class="dropdown">
-                    <button class="btn btn-outline-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Customer Details
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item" href="#">Profile</a>
-                        <a class="dropdown-item" href="#">Orders</a>
-                        <a class="dropdown-item" href="#">Settings</a>
-                    </div>
+                <div class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="dropdownMenuButton" href="" role="button"
+                       data-bs-toggle="dropdown" aria-expanded="false">[[${customer != null ? customer.firstName : 'Customer menu'}]]</a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" th:href="@{/shop/update} ">Account</a></li>
+                        <li><a class="dropdown-item" href="">Orders</a></li>
+<!--                                                 @{/shop/getOrders}-->
+                    </ul>
                 </div>
             </form>
         </div>
     </div>
+
 </nav>
 <style>
     .navbar-nav {
@@ -146,7 +149,6 @@
                         <div class="text-center">
                             <!-- Product name-->
                            <h5 class="fw-bolder" th:text="${prod.name}">Product name</h5>
-                           <h5 class="fw-bolder" th:text="${prod.color}">Product color</h5>
                             <h5 class="fw-bolder" th:text="${prod.productType}">Product type</h5>
                             <!-- Product price-->
                             <h5>$ <span th:text="${prod.price}"></span></h5>

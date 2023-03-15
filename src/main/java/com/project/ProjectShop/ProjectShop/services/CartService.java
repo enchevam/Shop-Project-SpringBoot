@@ -30,7 +30,7 @@ public class CartService {
         double cartTotalPrice = 0.0;
 
         for (OrderProduct item : items) {
-            double itemTotalPrice = item.getProduct().getPrice() * item.getQuantity();
+            double itemTotalPrice = Math.round((item.getProduct().getPrice() * item.getQuantity())* 100) / 100.0d;
             item.setTotalPrice(itemTotalPrice);
             cartTotalPrice += itemTotalPrice;
         }

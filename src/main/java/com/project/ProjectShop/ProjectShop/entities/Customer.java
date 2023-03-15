@@ -40,4 +40,10 @@ public class Customer {
     @OneToMany(mappedBy = "customer")
     private List<Order> orders;
 
+    public Customer() {
+    }
+
+    public Customer(String firstName) {
+        this.firstName = firstName;
+    }
 }

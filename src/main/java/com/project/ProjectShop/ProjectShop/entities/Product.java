@@ -47,8 +47,15 @@ public class Product { //Данни за стоките: product_id,name,price,q
 
     private String imageUrl;
 
+    public Product() {
+    }
 
-
-
-
+    public Product(String name, Integer quantity) {
+        this.name = name;
+        this.quantity = quantity;
+    }
+    public Product(Long id, Integer quantity) {
+        this.id = id;
+        this.quantity = quantity;
+    }
 }
