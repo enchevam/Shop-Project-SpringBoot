@@ -39,6 +39,6 @@ public class CustomerController {
             return "shop/register";
         }
 
-        return "redirect:/customerLogin";
+        return "redirect:/shop/customerLogin";
     }
 }

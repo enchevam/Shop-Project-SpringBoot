@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Random;
 
 @Service
 public class EmployeeService {
@@ -17,19 +18,12 @@ public class EmployeeService {
     public List<Employee> getSortedEmployees(String sortBy, String sortDirection) {
         List<Employee> employees = employeeRepository.findAll();
 
-        Comparator<Employee> comparator = null;
-
-        switch (sortBy) {
-            case "firstName":
-                comparator = Comparator.comparing(Employee::getFirstName);
-                break;
-            case "lastName":
-                comparator = Comparator.comparing(Employee::getLastName);
-                break;
-            case "salary":
-                comparator = Comparator.comparing(Employee::getSalary);
-                break;
-        }
+        Comparator<Employee> comparator = switch (sortBy) {
+            case "firstName" -> Comparator.comparing(Employee::getFirstName);
+            case "lastName" -> Comparator.comparing(Employee::getLastName);
+            case "salary" -> Comparator.comparing(Employee::getSalary);
+            default -> null;
+        };
 
         if (comparator != null) {
             if ("desc".equals(sortDirection)) {
@@ -39,4 +33,5 @@ public class EmployeeService {
         }
         return employees;
     }
+
 }

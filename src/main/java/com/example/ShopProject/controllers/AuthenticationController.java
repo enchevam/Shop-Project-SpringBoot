@@ -67,7 +67,7 @@ public class AuthenticationController {
 
             if (authenticatedCustomer.isPresent()) {
                 session.setAttribute("customer", authenticatedCustomer.get());
-                return "redirect:/shop/products";
+                return "redirect:/shop/all";
             } else {
                 model.addAttribute("customer", customer);
                 model.addAttribute("error", "Wrong email or password");
@@ -89,6 +89,4 @@ public class AuthenticationController {
             return "/shop/home";
         }
     }
-
-
 }

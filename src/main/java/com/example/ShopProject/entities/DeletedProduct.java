@@ -48,7 +48,7 @@ public class DeletedProduct {
         this.quantity = product.getQuantity();
         this.type = product.getType();
         this.color = product.getColor();
-        this.expireIn = product.getExpireIn();
+        this.expireIn = product.getExpireDate();
         this.deletedAt = new Timestamp(System.currentTimeMillis()).toLocalDateTime();
     }
 }

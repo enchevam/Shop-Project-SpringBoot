@@ -32,6 +32,10 @@
               <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" th:required="true" th:value="*{email}">
             </div>
             <div class="mb-3">
+              <label for="address" class="form-label">Address</label>
+              <input type="address" class="form-control" id="address" name="address" placeholder="Enter your address"  th:required="true" th:field="*{address}" >
+            </div>
+            <div class="mb-3">
               <label for="password" class="form-label">Password</label>
               <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password"  th:required="true" th:field="*{password}" >
             </div>

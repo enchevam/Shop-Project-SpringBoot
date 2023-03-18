@@ -46,6 +46,26 @@ public class Product {
     @NotNull(message = "Expire in cannot be null")
     @Future(message = "Expire date must be in the future")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate expireIn;
+    private LocalDate expireDate;
+    @Column
+    private String imageUrl;
+
+    @Column
+    @NotNull
+    private boolean available;
+
+
+
+    public Product() {
+    }
+
+    public Product(String name, Integer quantity) {
+        this.name = name;
+        this.quantity = quantity;
+    }
+    public Product(Long id, Integer quantity) {
+        this.id = id;
+        this.quantity = quantity;
+    }
 
 }

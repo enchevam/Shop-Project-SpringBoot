@@ -1,5 +1,6 @@
 package com.example.ShopProject.controllers;
 
+import com.example.ShopProject.entities.OrderProduct;
 import com.example.ShopProject.entities.Product;
 import com.example.ShopProject.services.ProductService;
 import com.example.ShopProject.utils.ProductType;
@@ -98,4 +99,12 @@ public class ProductController {
         model.addAttribute("products", products);
         return "shop/products";
     }
+    @GetMapping("/all")
+    public String showShop(Model model, String keyword, OrderProduct orderProduct) {
+        List<Product> products = productService.findAllAvailableQuantity(keyword);
+        model.addAttribute("products", products);
+        model.addAttribute("items", orderProduct.getQuantity());
+        return "shop/all";
+    }
+
 }

@@ -87,10 +87,10 @@
                     <th>Type</th>
                     <th>Color</th>
                     <th>
-                        <a th:href="@{/shop/products(sortBy=expireIn, sortDirection=${sortDirection == 'asc' ? 'desc' : 'asc'})}">
+                        <a th:href="@{/shop/products(sortBy=expireDate, sortDirection=${sortDirection == 'asc' ? 'desc' : 'asc'})}">
                             Expire In
-                            <span th:if="${sortBy == 'expireIn' and sortDirection == 'asc'}">&#x25B2;</span>
-                            <span th:if="${sortBy == 'expireIn' and sortDirection == 'desc'}">&#x25BC;</span>
+                            <span th:if="${sortBy == 'expireDate' and sortDirection == 'asc'}">&#x25B2;</span>
+                            <span th:if="${sortBy == 'expireDate' and sortDirection == 'desc'}">&#x25BC;</span>
                         </a>
                     </th>
                 </tr>
@@ -103,7 +103,7 @@
                     <td th:text="${product.quantity}"></td>
                     <td th:text="${product.type}"></td>
                     <td th:text="${product.color}"></td>
-                    <td th:text="${product.expireIn}"></td>
+                    <td th:text="${product.expireDate}"></td>
                     <th>
                         <div>
                             <a class="ui-btn ui-btn-flat" style="width: 150px; height: 50px; font-size: 18px;"

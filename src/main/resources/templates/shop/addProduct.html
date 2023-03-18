@@ -37,9 +37,9 @@
             <span th:if="${#fields.hasErrors('color')}" th:errors="*{color}" class="text-danger"></span>
         </div>
         <div class="form-group">
-            <label for="expireIn">Expire In:</label>
-            <input type="date" class="form-control" id="expireIn" th:field="*{expireIn}" th:value="${product.expireIn?.format('yyyy-MM-dd')}" required>
-            <span th:if="${#fields.hasErrors('expireIn')}" th:errors="*{expireIn}" class="text-danger"></span>
+            <label for="expireIn">Expire Date:</label>
+            <input type="date" class="form-control" id="expireIn" th:field="*{expireDate}" th:value="${product.expireDate?.format('yyyy-MM-dd')}" required>
+            <span th:if="${#fields.hasErrors('expireDate')}" th:errors="*{expireDate}" class="text-danger"></span>
         </div>
         <button type="submit" class="btn btn-primary">Add Product</button>
     </form>

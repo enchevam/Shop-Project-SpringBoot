@@ -1,10 +1,15 @@
 package com.example.ShopProject.entities;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
 
 @Entity
+@Getter
+@Setter
 @Table(name = "order_products")
 public class OrderProduct {
     @Id
@@ -24,12 +29,11 @@ public class OrderProduct {
     @DecimalMin(value = "0.0", inclusive = false, message = "Price should be greater than 0")
     @NotNull(message = "Price is mandatory")
     @Column(name = "price")
-    private BigDecimal price;
+    private BigDecimal totalPrice;
 
     @Min(value = 1, message = "Quantity should be greater than 0")
     @NotNull(message = "Quantity is mandatory")
     @Column(name = "quantity")
     private Integer quantity;
 
-    // getters and setters
 }

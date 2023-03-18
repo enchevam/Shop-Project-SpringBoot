@@ -19,4 +19,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "AND (:maxPrice is null or p.price <= :maxPrice)")
     List<Product> searchProducts(@Param("id") Long id, @Param("name") String name, @Param("quantity") Integer quantity,
                                  @Param("minPrice") BigDecimal minPrice, @Param("maxPrice") BigDecimal maxPrice);
+
+    @Query(value = "SELECT * FROM products WHERE name LIKE %?1% OR color LIKE %?1% OR product_type LIKE %?1% AND quantity > 0 " , nativeQuery = true)
+    public List<Product> search(String keyword);
 }

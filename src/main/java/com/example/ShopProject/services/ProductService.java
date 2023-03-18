@@ -10,10 +10,9 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ProductService {
@@ -29,7 +28,7 @@ public class ProductService {
         Comparator<Product> comparator = switch (sortBy) {
             case "name" -> Comparator.comparing(Product::getName);
             case "price" -> Comparator.comparing(Product::getPrice);
-            case "expireIn" -> Comparator.comparing(Product::getExpireIn);
+            case "expireIn" -> Comparator.comparing(Product::getExpireDate);
             default -> null;
         };
 
@@ -45,10 +44,6 @@ public class ProductService {
     public Product addProduct(Product product) {
         return productRepository.save(product);
     }
-
-   /* public void deleteProduct(Long productId) {
-        productRepository.deleteById(productId);
-    }*/
 
     public void deleteProduct(Long productId) {
         Product product = productRepository.findById(productId)
@@ -80,6 +75,35 @@ public class ProductService {
         }
 
         return productRepository.searchProducts(id, name, quantity, priceMin, priceMax);
+    }
+
+    public void save(Product product) {
+        productRepository.save(product);
+    }
+
+
+    public List<Product> findAllAvailableQuantity(String keyword) {
+        List<Product> availableProducts = new ArrayList<>();
+
+        if (keyword != null) {
+            List<Product> searchResults = productRepository.search(keyword);
+
+            for (Product product : searchResults) {
+                if (product.getQuantity() > 0) {
+                    availableProducts.add(product);
+                }
+            }
+        } else {
+            List<Product> allProducts = productRepository.findAll();
+
+            for (Product product : allProducts) {
+                if (product.getQuantity() > 0) {
+                    availableProducts.add(product);
+                }
+            }
+        }
+
+        return availableProducts;
     }
 
 
