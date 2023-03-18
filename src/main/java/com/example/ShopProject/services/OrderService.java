@@ -30,9 +30,11 @@ public class OrderService {
         return orderRepository.findAll();
     }
 
+    @Transactional
     public Order getOrderById(Long id) {
-        return orderRepository.findById(id).get();
+        return orderRepository.findById(id).orElse(null);
     }
+
 
     public Order saveOrder(Order order) {
         return orderRepository.save(order);

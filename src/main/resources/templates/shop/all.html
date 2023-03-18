@@ -26,7 +26,7 @@
             class="navbar-toggler-icon"></span></button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
-        <li class="nav-item"><a class="nav-link active" th:href="@{/}" aria-current="page" href="#!">Home</a></li>
+        <li class="nav-item"><a class="nav-link active" th:href="@{/shop/all}" aria-current="page" href="#!">Home</a></li>
         <li class="nav-item"><a class="nav-link" href="#!">About</a></li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" id="navbarDropdown" href="" role="button"
@@ -36,15 +36,15 @@
             <li>
               <hr class="dropdown-divider"/>
             </li >
-            <li><a class="dropdown-item" th:href="@{/(keyword=DRINKS)}">Drinks</a></li>
-            <li><a class="dropdown-item" th:href="@{/(keyword=FOOD)}">Food</a></li>
-            <li><a class="dropdown-item" th:href="@{/(keyword=SANITARY)}">Sanitary</a></li>
-            <li><a class="dropdown-item" th:href="@{/(keyword=MAKEUP)}">MakeUp</a></li>
-            <li><a class="dropdown-item" th:href="@{/(keyword=OTHER)}">Other</a></li>
+            <li><a class="dropdown-item" th:href="@{/shop/all(keyword=DRINKS)}">Drinks</a></li>
+            <li><a class="dropdown-item" th:href="@{/shop/all(keyword=FOOD)}">Food</a></li>
+            <li><a class="dropdown-item" th:href="@{/shop/all(keyword=SANITARY)}">Sanitary</a></li>
+            <li><a class="dropdown-item" th:href="@{/shop/all(keyword=MAKEUP)}">MakeUp</a></li>
+            <li><a class="dropdown-item" th:href="@{/shop/all(keyword=OTHER)}">Other</a></li>
           </ul>
         </li>
         <div class="search-form-container">
-          <form th:action="@{/}">
+          <form th:action="@{/shop/all}">
             Filter: <input type="text" name="keyword" id="keyword" size="30" th:value="${keyword}"
                            required/>
             &nbsp;

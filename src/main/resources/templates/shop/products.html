@@ -89,7 +89,7 @@
                     <th>
                         <a th:href="@{/shop/products(sortBy=expireDate, sortDirection=${sortDirection == 'asc' ? 'desc' : 'asc'})}">
                             Expire In
-                            <span th:if="${sortBy == 'expireDate' and sortDirection == 'asc'}">&#x25B2;</span>
+                            <span th:if="${sortBy == 'expireDate' and sortDirection == 'desc'}">&#x25B2;</span>
                             <span th:if="${sortBy == 'expireDate' and sortDirection == 'desc'}">&#x25BC;</span>
                         </a>
                     </th>

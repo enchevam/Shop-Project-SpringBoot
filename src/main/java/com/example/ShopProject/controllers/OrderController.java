@@ -72,15 +72,6 @@ public class OrderController {
     }
 
 
-    /*@GetMapping("/customerOrders")
-    public String showCustomerOrders(Model model, HttpSession session) {
-        Customer customer = (Customer) session.getAttribute("customer");
-        List<Order> orders = orderService.getOrdersByCustomer(customer);
-        model.addAttribute("orders", orders);
-        return "shop/customerOrders";
-    }*/
-
-
     @GetMapping("/orders")
     public String showOrders(Model model) {
         List<Order> orders = orderService.getAllOrders();
@@ -110,5 +101,16 @@ public class OrderController {
         model.addAttribute("order", order);
         return "redirect:/shop/orders";
     }
+
+    @GetMapping("/orders/details/{id}")
+    public String getOrderDetails(@PathVariable("id") Long id, Model model) {
+        Order order = orderService.getOrderById(id);
+        if (order == null || order.getOrderProducts().isEmpty()) {
+            return "redirect:/shop/orders";
+        }
+        model.addAttribute("order", order);
+        return "shop/orderDetails";
+    }
+
 
 }
