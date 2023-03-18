@@ -12,45 +12,19 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
-
+import java.util.*;
 
 @Service
 
 public class OrderService {
+    @Autowired
+    private OrderProductRepository orderProductRepository;
     @Autowired
     private ProductRepository productRepository;
     @Autowired
     private OrderRepository orderRepository;
     @Autowired
     private CustomerRepository customerRepository;
-
-    @Autowired
-    private EmployeeRepository employeeRepository;
-
-
-    public void createOrder(Order order) {
-
-        // Set current date and time for the order
-        order.setOrderDate(new Date());
-
-        // Get a list of all employees and choose one randomly
-        List<Employee> employees = employeeRepository.findAll();
-        Random random = new Random();
-        Employee employee = employees.get(random.nextInt(employees.size()));
-        order.setEmployee(employee);
-
-        // Set the order status to PENDING
-        order.setOrderStatus(OrderStatus.PENDING);
-
-        // Save the order
-        orderRepository.save(order);
-    }
 
     public List<Order> getAllOrders() {
         return orderRepository.findAll();
@@ -67,6 +41,35 @@ public class OrderService {
     public void deleteOrderById(Long id) {
         orderRepository.deleteById(id);
     }
+
+    public void saveOrder(Cart cart, HttpSession session) {
+        Customer customer = (Customer) session.getAttribute("customer");
+        Order order = new Order();
+        order.setCustomer(customer);
+        order.setOrderStatus(OrderStatus.valueOf("PENDING"));
+        order.setOrderDate(new Date());
+        order.setTotalPrice(cart.getTotalPrice());
+        List<OrderProduct> orderProductsChecked = checkProductQuantity(cart,order);
+
+        orderRepository.save(order);
+        order.setOrderProducts(orderProductsChecked);
+        orderProductRepository.saveAll(orderProductsChecked);
+    }
+    public List<OrderProduct> checkProductQuantity(Cart cart, Order order){
+        List<OrderProduct> orderProductsChecked = new ArrayList<>();
+        for (OrderProduct orderProduct : cart.getOrderProducts()) {
+            Product product = productRepository.findById(orderProduct.getProduct().getId()).get();
+            if (product.getQuantity() < orderProduct.getQuantity()) {
+                throw new RuntimeException("Product out of stock: " + product.getName());
+            }
+            product.setQuantity(product.getQuantity() - orderProduct.getQuantity());
+            productRepository.save(product);
+            orderProduct.setOrder(order);
+            orderProductsChecked.add(orderProduct);
+        }
+        return orderProductsChecked;
+    }
+
 
     public List<Order> getAllOrdersSortedByDate() {
         return orderRepository.findAll(Sort.by(Sort.Direction.DESC, "orderDate"));
@@ -99,18 +102,5 @@ public class OrderService {
         return orderRepository.findByCustomer(customer);
     }
 
-    public List<Order> getOrdersByCustomer(Customer customer) {
-        return orderRepository.findByCustomerOrderByOrderDateDesc(customer);
-    }
 
-
-    private BigDecimal calculateTotalPrice(List<OrderProduct> orderProducts) {
-        BigDecimal totalPrice = BigDecimal.ZERO;
-        for (OrderProduct orderProduct : orderProducts) {
-            BigDecimal productPrice = orderProduct.getProduct().getPrice();
-            BigDecimal quantity = BigDecimal.valueOf(orderProduct.getQuantity());
-            totalPrice = totalPrice.add(productPrice.multiply(quantity));
-        }
-        return totalPrice;
-    }
 }

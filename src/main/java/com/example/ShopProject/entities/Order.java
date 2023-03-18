@@ -21,7 +21,6 @@ public class Order {
 
     @ManyToOne
     @JoinColumn(name = "employee_id")
-    @NotNull(message = "Employee is mandatory")
     private Employee employee;
 
     @NotNull(message = "Customer is mandatory")
@@ -48,9 +47,18 @@ public class Order {
     @OneToMany(mappedBy = "order")
     private List<OrderProduct> orderProducts;
 
+    public Order() {
+
+    }
+
 
     public void setStatus(OrderStatus status) {
         this.orderStatus = status;
+    }
+
+    public Order(Date orderDate, Double totalPrice) {
+        this.orderDate = orderDate;
+        this.totalPrice = BigDecimal.valueOf(totalPrice);
     }
 
 }

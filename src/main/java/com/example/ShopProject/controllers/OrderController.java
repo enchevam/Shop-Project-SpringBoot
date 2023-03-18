@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.security.Principal;
 import java.util.ArrayList;
@@ -27,56 +28,57 @@ public class OrderController {
     private CustomerService customerService;
 
 
-   /* @GetMapping("/addOrder")
-    public String showAddOrderPage(Model model, HttpSession session) {
+    @GetMapping("/add")
+    public String addOrder(Model model, HttpSession session, HttpServletRequest request, RedirectAttributes redirectAttributes, Principal p) {
         Customer customer = (Customer) session.getAttribute("customer");
+        /*try {
+            customer = authenticationService.takeCustomerSession(session);
+        } catch (RuntimeException e) {
+            redirectAttributes.addFlashAttribute("message", e.getMessage());
+        }*/
+
         Cart cart = (Cart) session.getAttribute("cart");
 
-        if (cart == null || cart.getOrderProducts() == null || cart.getOrderProducts().size() == 0) {
+        if (cart == null || cart.getOrderProducts() == null || cart.getOrderProducts().isEmpty()) {
             cart = new Cart();
             System.out.println("Order - cart empty 2" + cart);
-            model.addAttribute("message", "You have to add products!!!");
-            return "redirect:/shop/all";
+            redirectAttributes.addFlashAttribute("message", "You have to add products!!!");
+            return "redirect:/cart";
         }
-
         model.addAttribute("cart", cart);
         model.addAttribute("customer", customer);
         model.addAttribute("cartItems", cart.getOrderProducts());
 
-        return "shop/shCart";
-    }*/
+        return "shop/addOrder";
+    }
 
-   /* @PostMapping("/addOrder")
-    public String addOrder(HttpSession session, RedirectAttributes redirectAttributes, Model model) {
+    @PostMapping("/addOrder")
+    public String addOrder(HttpSession session, RedirectAttributes redirectAttributes) {
         Cart cart = (Cart) session.getAttribute("cart");
-        Customer customer = (Customer) session.getAttribute("customer");
-
         if (cart == null || cart.getOrderProducts() == null || cart.getOrderProducts().isEmpty()) {
-            redirectAttributes.addFlashAttribute("message", "Shopping Cart is empty");
-            return "redirect:/shop/shCart";
+            redirectAttributes.addFlashAttribute("message", "ShoppingCart is empty");
+            return "redirect:/cart";
         }
 
         try {
             orderService.saveOrder(cart, session);
             session.removeAttribute("cart");
-            List<Order> orders = orderService.getOrdersByCustomer(customer);
-            model.addAttribute("orders", orders);
             redirectAttributes.addFlashAttribute("message", "Order has been saved!");
-            return "redirect:/shop/customerOrders";
+            return "redirect:/shop/all";
         } catch (RuntimeException e) {
             redirectAttributes.addFlashAttribute("message", e.getMessage());
-            return "redirect:/shop/shCart";
+            return "redirect:/cart";
         }
-    }*/
+    }
 
 
-    @GetMapping("/customerOrders")
+    /*@GetMapping("/customerOrders")
     public String showCustomerOrders(Model model, HttpSession session) {
         Customer customer = (Customer) session.getAttribute("customer");
         List<Order> orders = orderService.getOrdersByCustomer(customer);
         model.addAttribute("orders", orders);
         return "shop/customerOrders";
-    }
+    }*/
 
 
     @GetMapping("/orders")
@@ -108,6 +110,5 @@ public class OrderController {
         model.addAttribute("order", order);
         return "redirect:/shop/orders";
     }
-
 
 }

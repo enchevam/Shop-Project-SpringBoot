@@ -23,7 +23,7 @@ public class CartController {
     public String showCart(Model model, HttpSession session, RedirectAttributes redirectAttributes) {
         Cart cart = (Cart) session.getAttribute("cart");
 
-        if (cart == null || cart.getOrderProducts() == null ) {
+        if (cart == null || cart.getOrderProducts() == null || cart.getOrderProducts().isEmpty()) {
             cart = new Cart();
             System.out.println("Cart - Cart empty 1 " + cart);
             redirectAttributes.addFlashAttribute("message", "ShoppingCart Empty!!!");
@@ -59,4 +59,5 @@ public class CartController {
         }
         return "redirect:/cart";
     }
+
 }

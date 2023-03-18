@@ -31,17 +31,29 @@ public class CartService {
         return null;
     }
 
-    public BigDecimal calculateTotalPrice(List<OrderProduct> items) {
+    public BigDecimal calculateTotalPrice(List<OrderProduct> orderProducts) {
         BigDecimal cartTotalPrice = BigDecimal.ZERO;
 
-        for (OrderProduct item : items) {
-            BigDecimal itemTotalPrice = item.getProduct().getPrice().multiply(BigDecimal.valueOf(item.getQuantity()));
-            item.setTotalPrice(itemTotalPrice);
-            cartTotalPrice = cartTotalPrice.add(itemTotalPrice);
+        for (OrderProduct item : orderProducts) {
+            BigDecimal productPrice = item.getProduct().getPrice().multiply(BigDecimal.valueOf(item.getQuantity()));
+            item.setTotalPrice(productPrice);
+            cartTotalPrice = cartTotalPrice.add(productPrice);
         }
 
         return cartTotalPrice.setScale(2, RoundingMode.HALF_UP);
     }
+
+    /*public BigDecimal calculateTotalPrice(List<OrderProduct> orderProducts) {
+        BigDecimal totalPrice = BigDecimal.ZERO;
+        if (orderProducts != null) {
+            for (OrderProduct orderProduct : orderProducts) {
+                BigDecimal productPrice = orderProduct.getProduct().getPrice();
+                BigDecimal quantity = BigDecimal.valueOf(orderProduct.getQuantity());
+                totalPrice = totalPrice.add(productPrice.multiply(quantity));
+            }
+        }
+        return totalPrice;
+    }*/
 
 
     public void addItemToShoppingCart(Long productId, HttpSession session) {
