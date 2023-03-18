@@ -102,5 +102,9 @@ public class OrderService {
         return orderRepository.findByCustomer(customer);
     }
 
+    public List<Order> getOrdersByCustomer(Customer customer) {
+        return orderRepository.findByCustomer(customer);
+    }
+
 
 }

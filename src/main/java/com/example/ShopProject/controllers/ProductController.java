@@ -1,5 +1,6 @@
 package com.example.ShopProject.controllers;
 
+import com.example.ShopProject.entities.Customer;
 import com.example.ShopProject.entities.OrderProduct;
 import com.example.ShopProject.entities.Product;
 import com.example.ShopProject.services.ProductService;
@@ -11,6 +12,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -100,8 +102,10 @@ public class ProductController {
         return "shop/products";
     }
     @GetMapping("/all")
-    public String showShop(Model model, String keyword, OrderProduct orderProduct) {
+    public String showShop(Model model, String keyword, OrderProduct orderProduct, HttpSession session) {
+        Customer customer = (Customer) session.getAttribute("customer");
         List<Product> products = productService.findAllAvailableQuantity(keyword);
+        model.addAttribute("customer",customer);
         model.addAttribute("products", products);
         model.addAttribute("items", orderProduct.getQuantity());
         return "shop/all";

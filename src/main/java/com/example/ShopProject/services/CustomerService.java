@@ -42,7 +42,6 @@ public class CustomerService {
         if (optionalCustomer.isPresent()) {
             return optionalCustomer.get();
         } else {
-            // Тук можеш да хвърлиш изключение или да върнеш null в зависимост от желанието си
             throw new RuntimeException("Customer not found");
         }
     }

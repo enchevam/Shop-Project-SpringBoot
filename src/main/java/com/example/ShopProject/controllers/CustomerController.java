@@ -1,7 +1,9 @@
 package com.example.ShopProject.controllers;
 
 import com.example.ShopProject.entities.Customer;
+import com.example.ShopProject.entities.Order;
 import com.example.ShopProject.services.CustomerService;
+import com.example.ShopProject.services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,7 +13,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 @RequestMapping("/shop")
@@ -19,6 +23,9 @@ public class CustomerController {
 
     @Autowired
     private CustomerService customerService;
+
+    @Autowired
+    private OrderService orderService;
 
     @GetMapping("/register")
     public String registerForm(Model model) {
@@ -41,4 +48,13 @@ public class CustomerController {
 
         return "redirect:/shop/customerLogin";
     }
+
+    @GetMapping("/customerOrders")
+    public String customerOrders(Model model, HttpSession session) {
+        Customer loggedInCustomer = (Customer) session.getAttribute("customer");
+        List<Order> customerOrders = orderService.getOrdersByCustomer(loggedInCustomer);
+        model.addAttribute("customerOrders", customerOrders);
+        return "shop/customerOrders";
+    }
+
 }

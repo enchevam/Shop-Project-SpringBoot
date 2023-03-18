@@ -68,7 +68,7 @@
         </button>
         <div class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" id="dropdownMenuButton" href="" role="button"
-             data-bs-toggle="dropdown" aria-expanded="false">Logged in as: [[${#httpServletRequest.remoteUser}]]</a>
+             data-bs-toggle="dropdown" aria-expanded="false"> [[${customer != null ? customer.firstName : 'Logged in as'}]]</a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
             <li>
               <a class="dropdown-item" th:href="@{/shop/accountDetails(user=${#httpServletRequest.remoteUser})}">
@@ -149,6 +149,9 @@
           <h4 class="card-title">
             <a href="#" th:text="${product.name}"></a>
           </h4>
+          <h5 class="card-title">
+            <a href="#" th:text="${product.type}"></a>
+          </h5>
           <h5 th:text="${product.price}"></h5>
         </div>
         <div class="card-footer">
