@@ -106,11 +106,13 @@ public class OrderController {
     public String getOrderDetails(@PathVariable("id") Long id, Model model) {
         Order order = orderService.getOrderById(id);
         if (order == null || order.getOrderProducts().isEmpty()) {
-            return "redirect:/shop/orders";
+            return "redirect:/orders";
         }
         model.addAttribute("order", order);
+        model.addAttribute("customer", order.getCustomer());
         return "shop/orderDetails";
     }
+
 
 
 }
