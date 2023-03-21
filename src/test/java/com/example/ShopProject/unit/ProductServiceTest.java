@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class ProductServiceTest {
 
@@ -63,6 +63,15 @@ public class ProductServiceTest {
         int expected = 2;
 
         assertEquals(expected, actual.size());
+    }
+
+    @Test
+    public void testAddProduct(){
+        Product product = new Product();
+        when(productRepository.save(product)).thenReturn(product);
+        productService.addProduct(product);
+        verify(productRepository,atLeastOnce()).save(product);
+
     }
 
 }

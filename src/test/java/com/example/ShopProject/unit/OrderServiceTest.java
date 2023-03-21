@@ -1,10 +1,12 @@
 package com.example.ShopProject.unit;
 
 
+import com.example.ShopProject.entities.Customer;
 import com.example.ShopProject.entities.Order;
 import com.example.ShopProject.repositories.OrderRepository;
 import com.example.ShopProject.services.OrderService;
 
+import com.example.ShopProject.utils.OrderStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -66,6 +68,36 @@ public class OrderServiceTest {
         Long orderId = 1L;
         orderService.deleteOrderById(orderId);
         verify(orderRepository, times(1)).deleteById(orderId);
+    }
+
+    @Test
+    public void testGetOrdersByStatusIfNull(){
+        List<Order> orders = new ArrayList<>();
+        OrderStatus status = null;
+        when(orderRepository.findAll()).thenReturn( orders);
+
+        List<Order> actual = orderService.getOrdersByStatus(status);
+        List<Order> expected = new ArrayList<>();
+        assertEquals(expected, actual);
+    }
+    @Test
+    public void testGetOrdersByStatusIfNotNUll(){
+        List<Order> orders = new ArrayList<>();
+        OrderStatus status = OrderStatus.valueOf("DELIVERED");
+        when(orderRepository.findAll()).thenReturn( orders);
+
+        List<Order> actual = orderService.getOrdersByStatus(status);
+        List<Order> expected = orders;
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testGetOrdersByCustomer(){
+        Customer customer = new Customer();
+        List<Order> orders = new ArrayList<>();
+        when(orderRepository.findByCustomer(customer)).thenReturn(orders);
+        List<Order> actual = orderService.getOrdersByCustomer(customer);
+        assertEquals(orders,actual);
     }
 
 }

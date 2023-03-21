@@ -41,8 +41,8 @@ public class ProductService {
         return products;
     }
 
-    public Product addProduct(Product product) {
-        return productRepository.save(product);
+    public void addProduct(Product product) {
+        productRepository.save(product);
     }
 
     public void deleteProduct(Long productId) {
@@ -53,12 +53,12 @@ public class ProductService {
         productRepository.delete(product);
     }
 
-    public Product updateProduct(Long id, Product product) {
+    public void updateProduct(Long id, Product product) {
         if (!id.equals(product.getId())) {
             product.setId(id);
         }
 
-        return productRepository.save(product);
+        productRepository.save(product);
     }
 
     public Product getProductById(Long productId) {
