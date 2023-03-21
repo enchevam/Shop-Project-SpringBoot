@@ -101,12 +101,13 @@ public class ProductController {
         model.addAttribute("products", products);
         return "shop/products";
     }
+
     @GetMapping("/all")
     public String showShop(Model model, String keyword, OrderProduct orderProduct, HttpSession session) {
         Customer customer = (Customer) session.getAttribute("customer");
         List<Product> products = productService.findAllAvailableQuantity(keyword);
-        model.addAttribute("customer",customer);
         model.addAttribute("products", products);
+        model.addAttribute("customer", customer);
         model.addAttribute("items", orderProduct.getQuantity());
         return "shop/all";
     }

@@ -14,7 +14,7 @@
                 </div>
                 <div class="card-body">
                     <form th:object="${customer}" th:action="@{/shop/customerLogin}" method="post" action="all.html">
-                    <div class="mb-3">
+                        <div class="mb-3">
                             <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="alert alert-danger text-center mt-3"></p>
                             <p class="alert alert-danger mt-2" th:if="${error}" th:text="${error}"></p>
                             <label for="email" class="form-label">Customer email</label>

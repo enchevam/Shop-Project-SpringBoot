@@ -20,13 +20,13 @@
             <li class="nav-item">
                 <a class="nav-link" th:href="@{/shop/products}">Products</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" th:href="@{/shop/orders}">Orders</a>
-            </li>
         </ul>
         <ul class="navbar-nav ms-auto">
             <li class="nav-item">
-                <a class="nav-link" th:href="@{/shop/index}">Logout</a>
+                <form align="right"
+                      th:action="@{/logout}" method="post">
+                    <input type="submit" value="Logout" class="btn btn-info"/>
+                </form>
             </li>
         </ul>
     </div>

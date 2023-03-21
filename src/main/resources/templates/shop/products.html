@@ -26,13 +26,13 @@
             <li class="nav-item">
                 <a class="nav-link" th:href="@{/shop/employees}">Employees</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" th:href="@{/shop/orders}">Orders</a>
-            </li>
         </ul>
         <ul class="navbar-nav ms-auto">
             <li class="nav-item">
-                <a class="nav-link" th:href="@{/shop/index}">Logout</a>
+                <form align="right"
+                      th:action="@{/logout}" method="post">
+                    <input type="submit" value="Logout" class="btn btn-info"/>
+                </form>
             </li>
         </ul>
     </div>
@@ -92,7 +92,7 @@
                     <th>
                         <a th:href="@{/shop/products(sortBy=expireDate, sortDirection=${sortDirection == 'asc' ? 'desc' : 'asc'})}">
                             Expire In
-                            <span th:if="${sortBy == 'expireDate' and sortDirection == 'desc'}">&#x25B2;</span>
+                            <span th:if="${sortBy == 'expireDate' and sortDirection == 'asc'}">&#x25B2;</span>
                             <span th:if="${sortBy == 'expireDate' and sortDirection == 'desc'}">&#x25BC;</span>
                         </a>
                     </th>
@@ -110,8 +110,8 @@
                     <th>
                         <div>
                             <a class="ui-btn ui-btn-flat" style="width: 150px; height: 50px; font-size: 18px;"
-                               th:href="@{/shop/editProduct/{productId}(productId=${product.id})}">Edit</a>
-                            <form method="post" th:action="@{/shop/delete/{productId}(productId=${product.id})}"
+                               th:href="@{/shop/editProduct/{id}(id=${product.id})}">Edit</a>
+                            <form method="post" th:action="@{/shop/delete/{id}(id=${product.id})}"
                                   onsubmit="return confirm('Are you sure you want to delete this product?')">
                                 <button type="submit" class="ui-btn ui-btn-flat"
                                         style="width: 150px; height: 50px; font-size: 18px;">Delete

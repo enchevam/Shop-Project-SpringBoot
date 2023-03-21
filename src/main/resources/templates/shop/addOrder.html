@@ -7,9 +7,10 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <link rel="icon" type="image/x-icon" href="assets/favicon.ico"/>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet"/>
-    <link href="css/styles.css" rel="stylesheet"/>
+    <link href="/css/styles.css" rel="stylesheet"/>
+    <link href="/css/shCard.css" rel="stylesheet"/>
 </head>
-<body th:object="${cart}" method="post" action="/shop/addOrder">
+<body th:object="${cart}" method="post" action="/order/addOrder">
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container px-4 px-lg-5">
         <a class="navbar-brand" href="#!">M & D</a>
@@ -18,7 +19,7 @@
                 class="navbar-toggler-icon"></span></button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
-                <li class="nav-item"><a class="nav-link active" th:href="@{/}" aria-current="page" href="#!">Home</a>
+                <li class="nav-item"><a class="nav-link active" th:href="@{/shop/all}" aria-current="page" href="#!">Home</a>
                 </li>
                 <li class="nav-item"><a class="nav-link" href="#!">About</a></li>
                 <li class="nav-item dropdown">
@@ -29,11 +30,11 @@
                         <li>
                             <hr class="dropdown-divider"/>
                         </li>
-                        <li><a class="dropdown-item" th:href="@{/(keyword=DRINKS)}">Drinks</a></li>
-                        <li><a class="dropdown-item" th:href="@{/(keyword=FOOD)}">Food</a></li>
-                        <li><a class="dropdown-item" th:href="@{/(keyword=SANITARY)}">Sanitary</a></li>
-                        <li><a class="dropdown-item" th:href="@{/(keyword=MAKEUP)}">MakeUp</a></li>
-                        <li><a class="dropdown-item" th:href="@{/(keyword=OTHER)}">Other</a></li>
+                        <li><a class="dropdown-item" th:href="@{/shop/all(keyword=DRINKS)}">Drinks</a></li>
+                        <li><a class="dropdown-item" th:href="@{/shop/all(keyword=FOOD)}">Food</a></li>
+                        <li><a class="dropdown-item" th:href="@{/shop/all(keyword=SANITARY)}">Sanitary</a></li>
+                        <li><a class="dropdown-item" th:href="@{/shop/all(keyword=MAKEUP)}">MakeUp</a></li>
+                        <li><a class="dropdown-item" th:href="@{/shop/all(keyword=OTHER)}">Other</a></li>
                     </ul>
                 </li>
             </ul>
@@ -47,7 +48,9 @@
         </div>
     </div>
 </nav>
-
+<div th:if="${message}" class="alert alert-success text-center">
+    [[${message}]]
+</div>
 <div class="form-group column">
     <label for="firstName" class="col-sm-2 col-form-label">Customer information:</label>
     <input type="hidden" th:field="*{customer.id}">
@@ -61,8 +64,8 @@
         <input type="text" class="form-control" id="address" name="address" readonly th:value="${customer.address}">
     </div>
 
-    <form th:href="@{/shop/update}">
-        <a class="btn btn-secondary" href="/shop/update" role="button">Update address</a>
+    <form th:href="@{/shop/accountDetails}">
+        <a class="btn btn-secondary" href="/shop/accountDetails" role="button">Update address</a>
     </form>
 </div>
 
@@ -96,7 +99,7 @@
 </div>
 
 <!--    <button th:href="@{/addOrder}">Add Order</button>-->
-<form th:action="@{/shop/addOrder}" method="post">
+<form th:action="@{/order/addOrder}" method="post">
     <button type="submit">Place order</button>
 </form>
 </form>

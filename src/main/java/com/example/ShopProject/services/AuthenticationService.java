@@ -6,11 +6,13 @@ import com.example.ShopProject.repositories.CustomerRepository;
 import com.example.ShopProject.repositories.EmployeeRepository;
 import com.example.ShopProject.utils.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.validation.Valid;
+import javax.servlet.http.HttpSession;
 import java.util.Optional;
 
 @Service
@@ -33,7 +35,7 @@ public class AuthenticationService {
         return Optional.empty();
     }
 
-    public Optional<Employee> getEmployeeById(Long employeeId){
+    public Optional<Employee> getEmployeeById(Long employeeId) {
         Employee employee = employeeRepository.findById(employeeId)
                 .orElseThrow(() -> new ResourceNotFoundException("Employee not found"));
         if (employee != null) {
@@ -54,8 +56,24 @@ public class AuthenticationService {
     }
 
 
-    public Optional<Customer> getCustomerByEmail(String email){
+    public Optional<Customer> getCustomerByEmail(String email) {
         return Optional.ofNullable(customerRepository.findByEmail(email));
     }
 
+    public Employee takeCustomerSession(HttpSession session) {
+        String id = null;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()) {
+            Object principal = authentication.getPrincipal();
+            if (principal instanceof UserDetails) {
+                id = ((UserDetails) principal).getUsername();
+            }
+        }
+        Employee employee = employeeRepository.findById(Long.valueOf(id)).get();
+        session.setAttribute("employee", employee);
+        if (employee == null) {
+            throw new RuntimeException("No such customer");
+        }
+        return employee;
+    }
 }

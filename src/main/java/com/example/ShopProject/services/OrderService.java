@@ -1,7 +1,10 @@
 package com.example.ShopProject.services;
 
 import com.example.ShopProject.entities.*;
-import com.example.ShopProject.repositories.*;
+import com.example.ShopProject.repositories.CustomerRepository;
+import com.example.ShopProject.repositories.OrderProductRepository;
+import com.example.ShopProject.repositories.OrderRepository;
+import com.example.ShopProject.repositories.ProductRepository;
 import com.example.ShopProject.utils.Cart;
 import com.example.ShopProject.utils.OrderStatus;
 import com.example.ShopProject.utils.exceptions.OrderNotFoundException;
@@ -11,8 +14,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpSession;
-import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @Service
 
@@ -23,18 +27,15 @@ public class OrderService {
     private ProductRepository productRepository;
     @Autowired
     private OrderRepository orderRepository;
-    @Autowired
-    private CustomerRepository customerRepository;
+
 
     public List<Order> getAllOrders() {
         return orderRepository.findAll();
     }
 
-    @Transactional
     public Order getOrderById(Long id) {
-        return orderRepository.findById(id).orElse(null);
+        return orderRepository.findById(id).get();
     }
-
 
     public Order saveOrder(Order order) {
         return orderRepository.save(order);
@@ -87,26 +88,14 @@ public class OrderService {
     }
 
     @Transactional
-    public void updateOrderStatus(Long id, OrderStatus status) {
+    public void updateOrderStatus(Long id, OrderStatus status,HttpSession session) {
+        Employee employee =(Employee) session.getAttribute("employee");
         Order order = orderRepository.findById(id).orElseThrow(() -> new OrderNotFoundException(id));
         order.setStatus(status);
+        order.setEmployee(employee);
         orderRepository.save(order);
     }
-
-    public void addOrder(Order order, String customerEmail) {
-        Customer customer = customerRepository.findByEmail(customerEmail);
-        order.setCustomer(customer);
-        orderRepository.save(order);
-    }
-
-    public List<Order> getOrdersByCustomerEmail(String email) {
-        Customer customer = customerRepository.findByEmail(email);
-        return orderRepository.findByCustomer(customer);
-    }
-
     public List<Order> getOrdersByCustomer(Customer customer) {
         return orderRepository.findByCustomer(customer);
     }
-
-
 }

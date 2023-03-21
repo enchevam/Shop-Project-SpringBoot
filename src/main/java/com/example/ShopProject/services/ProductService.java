@@ -105,6 +105,4 @@ public class ProductService {
 
         return availableProducts;
     }
-
-
 }

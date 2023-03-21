@@ -5,22 +5,74 @@
   <title>Customer Orders</title>
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <style>
-    .order-details {
-  display: none;
-}
-.order-details td:first-child {
-  padding-top: 1em;
-}
-.order-arrow {
-  cursor: pointer;
-}
-.order-details table td {
-  padding-top: 0.5em;
-}
-  </style>
+  <link href="/css/styles.css" rel="stylesheet"/>
+  <link href="/css/shCard.css" rel="stylesheet"/>
+
 </head>
 <body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container px-4 px-lg-5">
+    <a class="navbar-brand" href="#!">M & D</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span
+            class="navbar-toggler-icon"></span></button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+        <li class="nav-item"><a class="nav-link active" th:href="@{/shop/all}" aria-current="page" href="#!">Home</a>
+        </li>
+        <li class="nav-item"><a class="nav-link" href="#!">About</a></li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" id="navbarDropdown" href="" role="button"
+             data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="#!">Categories</a></li>
+            <li>
+              <hr class="dropdown-divider"/>
+            </li>
+            <li><a class="dropdown-item" th:href="@{/shop/all(keyword=DRINKS)}">Drinks</a></li>
+            <li><a class="dropdown-item" th:href="@{/shop/all(keyword=FOOD)}">Food</a></li>
+            <li><a class="dropdown-item" th:href="@{/shop/all(keyword=SANITARY)}">Sanitary</a></li>
+            <li><a class="dropdown-item" th:href="@{/shop/all(keyword=MAKEUP)}">MakeUp</a></li>
+            <li><a class="dropdown-item" th:href="@{/shop/all(keyword=OTHER)}">Other</a></li>
+          </ul>
+        </li>
+        <div class="search-form-container">
+          <form th:action="@{/shop/all}">
+            Filter: <input type="text" name="keyword" id="keyword" size="30" th:value="${keyword}"
+                           required/>
+            &nbsp;
+            <input type="submit" value="Search"/>
+            &nbsp;
+            <input type="button" value="Clear" id="btnClear" onclick="clearSearch()"/>
+          </form>
+        </div>
+
+        <script type="text/javascript">
+    function clearSearch() {
+        window.location = "[[@{/shop/all}]]";
+    }
+
+                </script>
+      </ul>
+      <form class="d-flex" action="/cart">
+        <button class="btn btn-outline-dark me-2" type="submit">
+          <i class="bi-cart-fill me-1"></i>Cart
+          <span class="badge bg-dark text-white ms-1 rounded-pill" th:text="${items}"></span>
+        </button>
+        <div class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" id="dropdownMenuButton" href="" role="button"
+             data-bs-toggle="dropdown" aria-expanded="false">[[${customer != null ? customer.firstName :
+            'Logged in as:'}]]</a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" th:href="@{/shop/accountDetails}">View Account Details</a></li>
+            <li><a class="dropdown-item" th:href="@{/shop/customerOrders}">Orders</a></li>
+          </ul>
+        </div>
+      </form>
+    </div>
+  </div>
+</nav>
+
 <div class="container">
   <h1>Customer Orders</h1>
   <table class="table">

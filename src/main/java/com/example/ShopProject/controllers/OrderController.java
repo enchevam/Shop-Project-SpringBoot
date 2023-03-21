@@ -20,23 +20,20 @@ import java.util.List;
 
 
 @Controller
-@RequestMapping("/shop")
+@RequestMapping("/order")
 public class OrderController {
     @Autowired
     private OrderService orderService;
-    @Autowired
-    private CustomerService customerService;
 
 
     @GetMapping("/add")
     public String addOrder(Model model, HttpSession session, HttpServletRequest request, RedirectAttributes redirectAttributes, Principal p) {
         Customer customer = (Customer) session.getAttribute("customer");
-        /*try {
-            customer = authenticationService.takeCustomerSession(session);
-        } catch (RuntimeException e) {
-            redirectAttributes.addFlashAttribute("message", e.getMessage());
-        }*/
 
+        if (customer == null) {
+            redirectAttributes.addFlashAttribute("message", "You are not logged in");
+            return "redirect:/cart";
+        }
         Cart cart = (Cart) session.getAttribute("cart");
 
         if (cart == null || cart.getOrderProducts() == null || cart.getOrderProducts().isEmpty()) {
@@ -70,49 +67,5 @@ public class OrderController {
             return "redirect:/cart";
         }
     }
-
-
-    @GetMapping("/orders")
-    public String showOrders(Model model) {
-        List<Order> orders = orderService.getAllOrders();
-        model.addAttribute("orders", orders);
-        model.addAttribute("statuses", OrderStatus.values());
-        return "shop/orders";
-    }
-
-    @PostMapping("/orders/filter")
-    public String filterOrders(@RequestParam("status") String status, Model model) {
-        List<Order> orders;
-        if (status.equals("ALL")) {
-            orders = orderService.getAllOrders();
-        } else {
-            OrderStatus orderStatus = OrderStatus.valueOf(status);
-            orders = orderService.getOrdersByStatus(orderStatus);
-        }
-        model.addAttribute("orders", orders);
-        model.addAttribute("statuses", OrderStatus.values());
-        return "shop/orders";
-    }
-
-    @PostMapping("/orders/{id}/status")
-    public String updateOrderStatus(@PathVariable Long id, @RequestParam(name = "orderStatus") OrderStatus status, Model model) {
-        orderService.updateOrderStatus(id, status);
-        Order order = orderService.getOrderById(id);
-        model.addAttribute("order", order);
-        return "redirect:/shop/orders";
-    }
-
-    @GetMapping("/orders/details/{id}")
-    public String getOrderDetails(@PathVariable("id") Long id, Model model) {
-        Order order = orderService.getOrderById(id);
-        if (order == null || order.getOrderProducts().isEmpty()) {
-            return "redirect:/orders";
-        }
-        model.addAttribute("order", order);
-        model.addAttribute("customer", order.getCustomer());
-        return "shop/orderDetails";
-    }
-
-
 
 }

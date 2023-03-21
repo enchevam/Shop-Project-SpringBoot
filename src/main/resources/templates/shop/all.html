@@ -1,22 +1,24 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-  <meta name="description" content="" />
-  <meta name="author" content="" />
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+  <meta name="description" content=""/>
+  <meta name="author" content=""/>
   <title>Shop Homepage - Start Bootstrap Template</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
   <!-- Favicon-->
-  <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+  <link rel="icon" type="image/x-icon" href="assets/favicon.ico"/>
   <!-- Bootstrap icons-->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet"/>
   <!-- Core theme CSS (includes Bootstrap)-->
-  <link href="css/styles.css" rel="stylesheet" />
+  <link href="/css/styles.css" rel="stylesheet"/>
+  <link href="/css/shCard.css" rel="stylesheet"/>
 </head>
 <body>
+
 <!-- Navigation-->
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container px-4 px-lg-5">
@@ -26,7 +28,8 @@
             class="navbar-toggler-icon"></span></button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
-        <li class="nav-item"><a class="nav-link active" th:href="@{/shop/all}" aria-current="page" href="#!">Home</a></li>
+        <li class="nav-item"><a class="nav-link active" th:href="@{/shop/all}" aria-current="page" href="#!">Home</a>
+        </li>
         <li class="nav-item"><a class="nav-link" href="#!">About</a></li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" id="navbarDropdown" href="" role="button"
@@ -35,7 +38,7 @@
             <li><a class="dropdown-item" href="#!">Categories</a></li>
             <li>
               <hr class="dropdown-divider"/>
-            </li >
+            </li>
             <li><a class="dropdown-item" th:href="@{/shop/all(keyword=DRINKS)}">Drinks</a></li>
             <li><a class="dropdown-item" th:href="@{/shop/all(keyword=FOOD)}">Food</a></li>
             <li><a class="dropdown-item" th:href="@{/shop/all(keyword=SANITARY)}">Sanitary</a></li>
@@ -56,78 +59,38 @@
 
         <script type="text/javascript">
     function clearSearch() {
-        window.location = "[[@{/}]]";
+        window.location = "[[@{/shop/all}]]";
     }
-                    </script>
+
+                </script>
       </ul>
       <form class="d-flex" action="/cart">
         <button class="btn btn-outline-dark me-2" type="submit">
-          <i class="bi-cart-fill me-1"></i>
-          Cart
+          <i class="bi-cart-fill me-1"></i>Cart
           <span class="badge bg-dark text-white ms-1 rounded-pill" th:text="${items}"></span>
         </button>
         <div class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" id="dropdownMenuButton" href="" role="button"
-             data-bs-toggle="dropdown" aria-expanded="false"> [[${customer != null ? customer.firstName : 'Logged in as'}]]</a>
+             data-bs-toggle="dropdown" aria-expanded="false">[[${customer != null ? customer.firstName :
+            'Logged in as:'}]]</a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li>
-              <a class="dropdown-item" th:href="@{/shop/accountDetails(user=${#httpServletRequest.remoteUser})}">
-                View Account Details
-              </a>
-            </li>
-            <li>
-              <a class="dropdown-item" th:href="@{/shop/customerOrders}">Orders</a>
-            </li>
+            <li><a class="dropdown-item" th:href="@{/shop/accountDetails}">View Account Details</a></li>
+            <li><a class="dropdown-item" th:href="@{/shop/customerOrders}">Orders</a></li>
           </ul>
+        </div>
+        <div class="inline" align="right">
+          <a th:if="${customer == null}" th:href="@{/shop/customerLogin}"  method="get">
+            <input type="button" value="Log in" class="btn btn-info"/>
+          </a>
+          <a th:if="${customer != null}" th:href="@{/shop/out}" method="post">
+            <input type="button" value="Logout" class="btn btn-info"/>
+          </a>
         </div>
       </form>
     </div>
   </div>
 </nav>
-<style>
-    .navbar-nav {
-        display: flex;
-        align-items: center;
-    }
 
-    .nav-item:first-child {
-        flex-grow: 1;
-    }
-
-    .nav-item:nth-child(2) {
-        margin-right: auto;
-    }
-
-    .nav-item:nth-child(3) {
-        margin: 0 auto;
-    }
-
-    .nav-item:last-child {
-        margin-left: auto;
-    }
-
-    .form-control {
-        width: 100%;
-    }
-
-    @media (min-width: 992px) {
-        .navbar-nav {
-            flex-wrap: nowrap;
-        }
-
-        .nav-item:first-child {
-            flex-grow: 0;
-        }
-
-        .nav-item:nth-child(2) {
-            margin-right: unset;
-        }
-
-        .nav-item:nth-child(3) {
-            margin: 0 30px;
-        }
-    }
-</style>
 <div th:if="${message}" class="alert alert-success text-center">
   [[${message}]]
 </div>
@@ -144,20 +107,18 @@
   <div class="row">
     <div class="col-lg-3 col-md-6 mb-4" th:each="product : ${products}">
       <div class="card h-100">
-        <a href="#"><img class="card-img-top" th:src="@{${product.imageUrl}}" alt="" style="width: 200px; height: auto;"/></a>
+        <a href="#"><img class="card-img-top" th:src="@{${product.imageUrl}}" alt=""
+                         style="width: 200px; height: auto;"/></a>
         <div class="card-body">
           <h4 class="card-title">
             <a href="#" th:text="${product.name}"></a>
           </h4>
-          <h5 class="card-title">
-            <a href="#" th:text="${product.type}"></a>
-          </h5>
           <h5 th:text="${product.price}"></h5>
         </div>
         <div class="card-footer">
-        <!--  <a th:href="@{/product/{id}(id=${product.id})}" class="btn btn-primary">View Product</a> -->
+          <!--  <a th:href="@{/product/{id}(id=${product.id})}" class="btn btn-primary">View Product</a> -->
           <form th:action="@{/cart/add/{productId}}" method="post">
-            <input type="hidden" name="productId" th:value="${product.id}" />
+            <input type="hidden" name="productId" th:value="${product.id}"/>
             <button type="submit" class="btn btn-secondary">Add to Cart</button>
           </form>
         </div>

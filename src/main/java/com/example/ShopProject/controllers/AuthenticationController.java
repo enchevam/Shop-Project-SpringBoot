@@ -2,19 +2,19 @@ package com.example.ShopProject.controllers;
 
 import com.example.ShopProject.entities.Customer;
 import com.example.ShopProject.entities.Employee;
-import com.example.ShopProject.repositories.EmployeeRepository;
 import com.example.ShopProject.services.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import javax.validation.Valid;
 import java.util.Optional;
 
 @Controller
@@ -46,7 +46,7 @@ public class AuthenticationController {
                                            HttpSession session,
                                            Model model) {
         Optional<Employee> authenticatedEmployee = authService.authenticateEmployee(employee.getId(), employee.getPassword());
-
+        System.out.println("contoller emplyee login check");
         if (authenticatedEmployee.isPresent()) {
             session.setAttribute("employee", authenticatedEmployee.get());
             return "redirect:/shop/home";
@@ -80,13 +80,26 @@ public class AuthenticationController {
     }
 
     @GetMapping("/home")
-    public String showHome(HttpSession session, Model model) {
+    public String showHome(HttpSession session, Model model, RedirectAttributes redirectAttributes) {
         Employee employee = (Employee) session.getAttribute("employee");
+
+        try {
+            employee = authService.takeCustomerSession(session);
+        } catch (RuntimeException e) {
+            redirectAttributes.addFlashAttribute("message", e.getMessage());
+        }
         if (employee == null) {
             return "redirect:/shop/employeeLogin";
         } else {
             model.addAttribute("employee", employee);
             return "/shop/home";
         }
+    }
+    @PostMapping("/out")
+    public ModelAndView logoutButton(HttpSession session ) {
+        Customer customer = (Customer) session.getAttribute("customer");
+        session.invalidate();
+        System.out.println("check loggout");
+        return new ModelAndView("redirect:/shop/all");
     }
 }

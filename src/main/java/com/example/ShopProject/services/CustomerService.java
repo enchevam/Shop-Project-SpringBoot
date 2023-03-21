@@ -1,13 +1,11 @@
 package com.example.ShopProject.services;
 
 import com.example.ShopProject.entities.Customer;
-import com.example.ShopProject.entities.Order;
 import com.example.ShopProject.repositories.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -37,12 +35,4 @@ public class CustomerService {
         return customerRepository.findById(customerId).get();
     }
 
-    public Customer findByEmail(String email) {
-        Optional<Customer> optionalCustomer = Optional.ofNullable(customerRepository.findByEmail(email));
-        if (optionalCustomer.isPresent()) {
-            return optionalCustomer.get();
-        } else {
-            throw new RuntimeException("Customer not found");
-        }
-    }
 }

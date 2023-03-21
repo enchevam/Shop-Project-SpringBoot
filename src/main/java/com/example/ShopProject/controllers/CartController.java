@@ -1,5 +1,6 @@
 package com.example.ShopProject.controllers;
 
+import com.example.ShopProject.entities.Customer;
 import com.example.ShopProject.services.CartService;
 import com.example.ShopProject.utils.Cart;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,16 +23,22 @@ public class CartController {
     @GetMapping("/cart")
     public String showCart(Model model, HttpSession session, RedirectAttributes redirectAttributes) {
         Cart cart = (Cart) session.getAttribute("cart");
+        Customer customer = (Customer) session.getAttribute("customer");
+        if (customer == null) {
+            redirectAttributes.addFlashAttribute("message", "You are not logged in !!!");
+            return "redirect:/shop/all";
+        }
 
         if (cart == null || cart.getOrderProducts() == null || cart.getOrderProducts().isEmpty()) {
             cart = new Cart();
             System.out.println("Cart - Cart empty 1 " + cart);
             redirectAttributes.addFlashAttribute("message", "ShoppingCart Empty!!!");
-            return  "shop/shCart";
+            return "shop/shCart";
         }
 
         model.addAttribute("cart", cart.getOrderProducts());
         model.addAttribute("total", cart.getTotalPrice());
+        model.addAttribute("customer", customer);
 
         return "shop/shCart";
     }
@@ -39,7 +46,7 @@ public class CartController {
     @PostMapping("/cart/add/{productId}")
     public ModelAndView addToCart(@RequestParam(name = "productId") Long productId, HttpSession session) {
 
-        cartService.addItemToShoppingCart( productId, session);
+        cartService.addItemToShoppingCart(productId, session);
 
         return new ModelAndView("redirect:/cart");
     }

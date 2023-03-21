@@ -1,5 +1,6 @@
 package com.example.ShopProject.entities;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -38,6 +39,14 @@ public class Employee {
     @NotBlank(message = "Password cannot be blank")
     @Size(min = 8, message = "Password must be at least 8 characters")
     private String password;
+    private String role;
 
+    public Employee() {
+    }
 
+    public Employee(String firstName, String lastName, BigDecimal salary) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.salary = salary;
+    }
 }

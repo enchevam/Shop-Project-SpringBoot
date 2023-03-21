@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -23,7 +24,6 @@ public class CustomerController {
 
     @Autowired
     private CustomerService customerService;
-
     @Autowired
     private OrderService orderService;
 
@@ -50,11 +50,15 @@ public class CustomerController {
     }
 
     @GetMapping("/customerOrders")
-    public String customerOrders(Model model, HttpSession session) {
+    public String customerOrders(Model model, HttpSession session, RedirectAttributes redirectAttributes) {
         Customer loggedInCustomer = (Customer) session.getAttribute("customer");
+        if (loggedInCustomer == null) {
+            redirectAttributes.addFlashAttribute("message", "You are not logged in !!!");
+            return "redirect:/shop/all";
+        }
         List<Order> customerOrders = orderService.getOrdersByCustomer(loggedInCustomer);
         model.addAttribute("customerOrders", customerOrders);
+        model.addAttribute("customer", loggedInCustomer);
         return "shop/customerOrders";
     }
-
 }
