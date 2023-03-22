@@ -61,7 +61,6 @@ public class AuthenticationController {
         if (bindingResult.hasErrors()) {
             return "shop/customerLogin";
         }
-
         try {
             Optional<Customer> authenticatedCustomer = authService.authenticateCustomer(customer.getEmail(), customer.getPassword());
 
@@ -82,7 +81,6 @@ public class AuthenticationController {
     @GetMapping("/home")
     public String showHome(HttpSession session, Model model, RedirectAttributes redirectAttributes) {
         Employee employee = (Employee) session.getAttribute("employee");
-
         try {
             employee = authService.takeCustomerSession(session);
         } catch (RuntimeException e) {
@@ -95,11 +93,10 @@ public class AuthenticationController {
             return "/shop/home";
         }
     }
-    @PostMapping("/out")
-    public ModelAndView logoutButton(HttpSession session ) {
-        Customer customer = (Customer) session.getAttribute("customer");
-        session.invalidate();
-        System.out.println("check loggout");
+    @GetMapping("/out")
+    public ModelAndView logoutButton(HttpSession session) {
+        session.removeAttribute("customer");
+        System.out.println("remove session");
         return new ModelAndView("redirect:/shop/all");
     }
 }

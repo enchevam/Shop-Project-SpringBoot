@@ -21,18 +21,14 @@ public class CartController {
     private CartService cartService;
 
     @GetMapping("/cart")
-    public String showCart(Model model, HttpSession session, RedirectAttributes redirectAttributes) {
+    public String showCart(Model model, HttpSession session) {
         Cart cart = (Cart) session.getAttribute("cart");
         Customer customer = (Customer) session.getAttribute("customer");
-        if (customer == null) {
-            redirectAttributes.addFlashAttribute("message", "You are not logged in !!!");
-            return "redirect:/shop/all";
-        }
 
         if (cart == null || cart.getOrderProducts() == null || cart.getOrderProducts().isEmpty()) {
             cart = new Cart();
             System.out.println("Cart - Cart empty 1 " + cart);
-            redirectAttributes.addFlashAttribute("message", "ShoppingCart Empty!!!");
+            session.setAttribute("message", "ShoppingCart Empty!!!");
             return "shop/shCart";
         }
 

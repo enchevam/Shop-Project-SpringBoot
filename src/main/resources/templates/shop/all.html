@@ -78,15 +78,13 @@
             <li><a class="dropdown-item" th:href="@{/shop/customerOrders}">Orders</a></li>
           </ul>
         </div>
-        <div class="inline" align="right">
-          <a th:if="${customer == null}" th:href="@{/shop/customerLogin}"  method="get">
-            <input type="button" value="Log in" class="btn btn-info"/>
-          </a>
-          <a th:if="${customer != null}" th:href="@{/shop/out}" method="post">
-            <input type="button" value="Logout" class="btn btn-info"/>
-          </a>
-        </div>
       </form>
+        <div class="inline" align="right">
+          <a th:if="${customer == null}" href="/shop/customerLogin" class="btn btn-info" role="button">Login</a>
+          <form th:if="${customer != null}" th:action="@{/shop/out}" method="get">
+            <input type="submit" value="Logout" class="btn btn-info"/>
+          </form>
+        </div>
     </div>
   </div>
 </nav>

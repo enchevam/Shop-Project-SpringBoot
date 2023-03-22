@@ -1,7 +1,6 @@
 package com.example.ShopProject.services;
 
 import com.example.ShopProject.entities.*;
-import com.example.ShopProject.repositories.CustomerRepository;
 import com.example.ShopProject.repositories.OrderProductRepository;
 import com.example.ShopProject.repositories.OrderRepository;
 import com.example.ShopProject.repositories.ProductRepository;
@@ -63,7 +62,7 @@ public class OrderService {
         for (OrderProduct orderProduct : cart.getOrderProducts()) {
             Product product = productRepository.findById(orderProduct.getProduct().getId()).get();
             if (product.getQuantity() < orderProduct.getQuantity()) {
-                throw new RuntimeException("Product out of stock: " + product.getName());
+                throw new RuntimeException("The available quantity for: " + product.getName() + " is " + product.getQuantity());
             }
             product.setQuantity(product.getQuantity() - orderProduct.getQuantity());
             productRepository.save(product);
@@ -75,7 +74,7 @@ public class OrderService {
 
 
     public List<Order> getAllOrdersSortedByDate() {
-        return orderRepository.findAll(Sort.by(Sort.Direction.DESC, "orderDate"));
+        return orderRepository.findAll(Sort.by(Sort.Direction.ASC, "orderDate"));
     }
 
 
