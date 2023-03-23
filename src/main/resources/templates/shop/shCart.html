@@ -71,6 +71,12 @@
               <a class="dropdown-item" th:href="@{/shop/customerOrders}">Orders</a>
             </li>
           </ul>
+          <div class="inline" align="right">
+            <a th:if="${customer == null}" href="/shop/customerLogin" class="btn btn-info" role="button">Login</a>
+            <form th:if="${customer != null}" th:action="@{/shop/out}" method="get">
+              <input type="submit" value="Logout" class="btn btn-info"/>
+            </form>
+          </div>
         </div>
       </form>
     </div>
