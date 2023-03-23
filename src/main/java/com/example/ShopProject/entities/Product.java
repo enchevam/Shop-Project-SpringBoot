@@ -30,7 +30,7 @@ public class Product {
 
     @Column(name = "quantity")
     @NotNull(message = "Quantity cannot be null")
-    @Min(value = 1, message = "Quantity must be greater than or equal to 1")
+    @Min(value = 0, message = "Quantity must be greater than or equal to 1")
     private Integer quantity;
 
     @Column(name = "type")
