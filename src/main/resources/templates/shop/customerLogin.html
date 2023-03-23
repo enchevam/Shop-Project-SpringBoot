@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Login Page</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/css/bootstrap.min.css">
+</head>
+<body class="bg-dark">
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="text-center">Login</h3>
+                </div>
+                <div class="card-body">
+                    <form th:object="${customer}" th:action="@{/shop/customerLogin}" method="post" action="all.html">
+                        <div class="mb-3">
+                            <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="alert alert-danger text-center mt-3"></p>
+                            <p class="alert alert-danger mt-2" th:if="${error}" th:text="${error}"></p>
+                            <label for="email" class="form-label">Customer email</label>
+                            <input type="text" class="form-control" id="email" name="email" placeholder="Enter your email">
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password">
+                        </div>
+                        <button type="submit" class="btn btn-warning mr-2" name="submit">Login</button>
+                        <a href="/shop/register" class="btn btn-secondary" role="button">Register</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/js/bootstrap.min.js"></script>
+</body>
+</html>
