@@ -54,8 +54,6 @@ public class Product {
     @NotNull
     private boolean available;
 
-
-
     public Product() {
     }
 
